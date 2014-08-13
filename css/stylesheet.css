@@ -78,3 +78,20 @@ opacity:0.8;}
   height: 500px;
   float: left;
 }
+
+.pie {
+  width: 50%;
+  float: right;
+}
+
+/* .selectedElement {
+  width: 100%;
+  height: 10%;
+  position: relative;
+}*/
+
+.pieChart {
+  width: 100%;
+  height: 45%;
+  position: relative;
+}

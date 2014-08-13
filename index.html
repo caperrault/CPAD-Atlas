@@ -94,7 +94,7 @@
         <div id="main" class="page" style="">
 
           <div id="breadcrumbs" style="">
-              <p class="breadcrumbs"><a href="http://www.calands.org/">Home</a> > <a href="http://www.calands.org/data">Data</a> > <a href="http://www.calands.org/data">CPAD Atlas</a></p>
+              <p class="breadcrumbs"><a href="http://www.calands.org/">Home</a> > <a href="http://www.calands.org/data">Data</a> > <a href="http://localhost:8000/">CPAD Atlas</a></p>
           </div>
 
 		      <h2 style="padding-top:0;">CPAD Atlas</h2>
@@ -258,10 +258,16 @@
 
             </div>
 
-            <div id="countyPies" class="pies">
+            <div id="countyPies" class="pie">
+
+              <svg id="countyName" class="selectedElement" style="height: 35px; width: 100%;"></svg>
+
+              <svg id="countyPie1" class="pieChart" style="height: 232px; width: 100%;"></svg>
+
+              <svg id="countyPie2" class="pieChart" style="height: 233px; width: 100%;"></svg>
 
               <script>
-              
+
               d3.csv("Access_type_allcounties.csv", function (dataset) {
 
                         var width = 250,
@@ -272,7 +278,7 @@
                                             .range(["#FFC8B7", "#EF8B6C", "#F05522", "#E0E0E0"])
                                             .domain(d3.range(0,4));
 
-                        var svg = d3.select("body").append("svg")
+                        var svg = d3.select("#countyPie1").append("svg")
                                     .attr("width", width)
                                     .attr("height", height)
                                     .append("g")
@@ -295,7 +301,7 @@
                                       .attr("data-legend",function(d) { return d.Access_type})
                                       .style("display", "none");
 
-                        var legend = d3.select("body").append("svg")
+                        var legend = d3.select("#countyPie1").append("svg")
                         .attr("class", "legend")
                         .attr("width", radius * 2)
                         .attr("height", radius * 2)
@@ -346,6 +352,11 @@
 
                         });
 
+                    </script>
+
+
+
+<script>
 
               d3.csv("Agency_lev_allcounties.csv", function (dataset) {
 
@@ -355,7 +366,7 @@
 
                              var color = d3.scale.category20();
 
-                             var svg = d3.select("body").append("svg")
+                             var svg = d3.select("#countyPie2").append("svg")
                                          .attr("width", width)
                                          .attr("height", height)
                                          .append("g")
@@ -378,7 +389,7 @@
                                            .attr("data-legend",function(d) { return d.Agency_lev})
                                            .style("display", "none");
 
-                              var legend = d3.select("body").append("svg")
+                              var legend = d3.select("#countyPie2").append("svg")
                               .attr("class", "legend")
                               .attr("width", radius * 2)
                               .attr("height", radius * 2)
@@ -403,7 +414,7 @@
                               .text( function (d, i) { return dataset[i].Agency_lev;}
                               );
 
-                              var countyNameSvg = d3.select("body").append("svg")
+                              var countyNameSvg = d3.select("#countyName").append("svg")
                                                              .attr("width", 600)
                                                              .attr("height", 50)
                                                              .style("display", "none");
