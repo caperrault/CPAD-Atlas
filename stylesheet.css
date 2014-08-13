@@ -1,0 +1,32 @@
+.container {
+  height: 2800px;
+}
+
+.header {
+  height: 100px;
+}
+
+.core {
+  width: 100%;
+  position: absolute;
+  padding: 5px 0px 5px 10%;
+  margin-right: 50%;
+  position: relative;
+}
+
+#breadcrumbs {
+  padding: 0% 0% 0% 10%;
+  position relative;
+}
+
+h2 {
+  color: #506680;
+  font-family: Oswald, Helvetica, Arial,inherit;
+  font-size: 35px;
+  line-height: 40px;
+  margin-bottom: 10px;
+  font-weight: normal;
+  vertical-align: baseline;
+  display: block;
+  zoom: 1;
+}
