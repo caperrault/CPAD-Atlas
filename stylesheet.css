@@ -1,22 +1,13 @@
-.container {
-  height: 2800px;
-}
-
 .header {
   height: 100px;
 }
 
-.core {
-  width: 100%;
-  position: absolute;
+.page {
   padding: 5px 0px 5px 10%;
-  margin-right: 50%;
-  position: relative;
 }
 
 #breadcrumbs {
-  padding: 0% 0% 0% 10%;
-  position relative;
+  padding: 10px 10px 10px 0px;
 }
 
 h2 {
@@ -29,4 +20,10 @@ h2 {
   vertical-align: baseline;
   display: block;
   zoom: 1;
+}
+
+.content {
+  padding-right: 45%;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
