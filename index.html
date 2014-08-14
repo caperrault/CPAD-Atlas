@@ -158,22 +158,24 @@
 
                   var path = d3.geo.path().projection(projection);
 
-                  var LegendW = 30;
-                      LegendH = 80;
+                  var LegendW = 80;
+                      LegendH = 20;
 
-                  var svg = d3.select("body").append("svg:svg")
+                  var svg = d3.select("#countyMapSvg").append("svg:svg")
                       .attr("class", "mapLegend")
                       .attr("width", LegendW)
                       .attr("height", LegendH)
+                      .attr("x", 0)
+                      .attr("y", 420)
                       .style("display", "none");
 
                   var gradient = svg.append("svg:defs")
                     .append("svg:linearGradient")
                       .attr("id", "gradient")
-                      .attr("x1", "0%")
+                      .attr("x1", "100%")
                       .attr("y1", "0%")
                       .attr("x2", "0%")
-                      .attr("y2", "100%")
+                      .attr("y2", "0%")
                       .attr("spreadMethod", "pad");
 
                   gradient.append("svg:stop")
@@ -190,20 +192,21 @@
                       .attr("width", LegendW)
                       .attr("height", LegendH)
                       .style("fill", "url(#gradient)");
+                      //.attr("transform", "translate(50,10)");
 
                   svg.append("text")
                       .attr("text-anchor", "middle")
-                      .attr("x","50%")
-                      .attr("y","15%")
-                      .attr("dy",0)
-                      .text("+");
-
-                  svg.append("text")
-                      .attr("text-anchor", "middle")
-                      .attr("x","50%")
-                      .attr("y","90%")
+                      .attr("x","15%")
+                      .attr("y","65%")
                       .attr("dy",0)
                       .text("-");
+
+                  svg.append("text")
+                      .attr("text-anchor", "middle")
+                      .attr("x","85%")
+                      .attr("y","65%")
+                      .attr("dy",0)
+                      .text("+");
 
                   d3.selectAll(".radio").on("change", function(){
 
