@@ -38,7 +38,7 @@ h2 {
   background: white;
   }
 
-div.tooltip {
+div.mapTooltip {
   position: absolute;
   text-align: center;
   color: white;
@@ -55,19 +55,21 @@ div.tooltip {
 div.pieTooltip {
   position: absolute;
   text-align: center;
-  color: black;
+  color: #444;
   height: 25px;
-  padding: 2px 10px 2px 10px;
-  font-size: 10px;
+  font-size: 20px;
   font-weight: bold;
   background: none;
-  border: 3px;
-  border-radius: 2px;
   pointer-events: none;
 }
 
 path.geo:hover {
   fill-opacity: 0.5;
+  cursor: pointer;
+}
+
+path.chart:hover {
+  fill-opacity: 0.8;
   cursor: pointer;
 }
 

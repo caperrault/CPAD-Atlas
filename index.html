@@ -121,7 +121,7 @@
                 d3.json("caFields9.json", function(err, ca) {
 
                   var div = d3.select("body").append("div")
-                  .attr("class", "tooltip")
+                  .attr("class", "mapTooltip")
                   .style("opacity", 0);
 
                   var radio = d3.select(".ca")
@@ -249,7 +249,7 @@
                             d3.select(this).classed("selected", true).transition().duration(300);
                             updatePie1(d.properties.name);
                             updatePie2(d.properties.name);
-                            updateCountyName(d.properties.name);
+                            updateCountyName(d.properties.name+" County: "+d3.format(",")(d.properties.ac_tot)+" CPAD Acres");
                         });
 
                 });
@@ -306,7 +306,7 @@
                                       .data(pie)
                                       .enter().append("path")
                                       .attr("fill", function(d, i) { return color(i); })
-                                      .classed("geo", true)
+                                      .classed("chart", true)
                                       .attr("d", arc)
                                       .each(function(d) { this._current = d; })
                                       .attr("data-legend",function(d) { return d.Access_type})
@@ -370,11 +370,15 @@
 
                         });
 
-              d3.csv("Agency_lev_allcounties.csv", function (dataset) {
+              d3.csv("Agency_lev_allcounties_perc.csv", function (dataset) {
 
                              var width = 215,
                                  height = 300,
                                  radius = Math.min(width, height) / 2;
+
+                             var div = d3.select("body").append("div")
+                             .attr("class", "pieTooltip")
+                             .style("opacity", 0);
 
                              var color = d3.scale.category20();
 
@@ -396,10 +400,18 @@
                                            .data(pie2)
                                            .enter().append("path")
                                            .attr("fill", function(d, i) { return color(i); })
+                                           .classed("chart", true)
                                            .attr("d", arc)
                                            .each(function(d) { this._current = d; })
                                            .attr("data-legend",function(d) { return d.Agency_lev})
-                                           .style("display", "none");
+                                           .style("display", "none")
+                                           .on("mouseover", function(d, i) {
+                                           div.transition().duration(300).style("opacity", 1);
+                                           div.text(dataset[i].Agency_lev+": "+d.value+"%")
+                                           .style("left", (d3.event.pageX) + "px")
+                                           .style("top", (d3.event.pageY -30) + "px");})
+                                           .on("mouseout", function () { div.transition().duration(300).style("opacity", 0);
+                                           });
 
                               var legend = d3.select("#countyPie2").append("svg")
                               .attr("class", "legend")
@@ -457,7 +469,7 @@
                                             .attr("text-anchor", "left")
                                             .attr("x","0%")
                                             .attr("y","50%")
-                                            .text(function() { return name+" County" })
+                                            .text(function() { return name})
                                             .attr("fill", "#444")
                                             .attr("font-weight", "bold")
                                             .attr("font-size", "2em");
@@ -475,7 +487,6 @@
                               };
 
                              });
-
 
                 </script>
 
