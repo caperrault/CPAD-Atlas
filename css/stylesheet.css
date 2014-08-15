@@ -23,7 +23,7 @@ h2 {
 }
 
 .content {
-  padding-right: 45%;
+  padding-right: 50%;
   padding-top: 10px;
   padding-bottom: 10px;
 }
@@ -83,7 +83,7 @@ width: 100%;
 position: left;
 right: 10px;
 top: 10px;
-padding: 20px 20px 20px 0px;
+padding: 0px 20px 20px 0px;
 }
 
 .legend rect {
