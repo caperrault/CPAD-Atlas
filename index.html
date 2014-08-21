@@ -109,151 +109,350 @@
             <div class="content"><p>California counties are inequally wealthy in protected areas. The map below shows the distribution of protected areas throughout the 58 counties, either in terms of <strong>total acreage</strong> or <strong>acreage per inhabitant</strong>. <strong>Click on any county</strong> to take a deeper look into its protected areas.</p>
             </div>
 
-          <form>
-            <label><input type="Radio" name="dataset" id="ac_tot" class="radio" value="ac_tot"> Total Acreage</label>
-            <label><input type="Radio" name="dataset" id="ACR_NORM_1" class="radio" value="ACR_NORM_1"> Normalized by County Acreage</label>
-            <label><input type="Radio" name="dataset" id="POP_NORM" class="radio" value="POP_NORM"> Acres per Inhabitant</label>
-          </form>
+            <div id="tabs">
 
-            <div id="countyMap" class="map">
+            <div id="nav">
+              <p>Map view<input type="radio" name="tab" value="pkfrom" class="div2" checked /></p>
+              <p>Table view<input type="radio" name="tab" value="pkfrom" class="div1" /></p>
+            </div>
 
-              <svg id="countyMapSvg" class="ca">
+            <div id="div2" class="tab">
+
+              <div id="countyMap" class="map">
+
+<!--
+                <div>
+                <form>
+                  <label><input type="Radio" name="dataset" id="ac_tot" class="radio" value="ac_tot"> Total Acreage</label>
+                  <label><input type="Radio" name="dataset" id="ACR_NORM_1" class="radio" value="ACR_NORM_1"> Normalized by County Acreage</label>
+                  <label><input type="Radio" name="dataset" id="POP_NORM" class="radio" value="POP_NORM"> Acres per Inhabitant</label>
+                </form>
+              </div>-->
+
+                <svg id="countyMapSvg" class="ca">
+
+                  <script>
+
+                  d3.json("caFields9.json", function(err, ca) {
+
+                    var div = d3.select("body").append("div")
+                    .attr("class", "mapTooltip")
+                    .style("opacity", 0);
+
+                    var radio = d3.select(".ca")
+                                .append("input")
+                                .attr("type","Radio")
+
+                    var colorTOT = d3.scale.linear()
+                      .domain([30237, 993455, 12867928])
+                      .range(['rgb(255,245,96)','rgb(215,211,0)','rgb(35,132,67)'])
+                      .interpolate(d3.interpolateRgb);
+
+                    var colorACR = d3.scale.linear()
+                      .domain([0.01, 0.3228, 0.95])
+                      .range(['rgb(255,245,96)','rgb(205,211,0)','rgb(35,132,67)'])
+                      .interpolate(d3.interpolateRgb);
+
+                    var colorPOP = d3.scale.linear()
+                      .domain([0.01, 2.08, 368])
+                      .range(['rgb(255,245,96)','rgb(205,211,0)','rgb(35,132,67)'])
+                      .interpolate(d3.interpolateRgb);
+
+                    var projection = d3.geo.albers()
+                        .translate([70, 210])
+                        .scale(2700)
+                        .rotate([122.4183, 0])
+                        .center([0, 37.7750]);
+
+                    var svg = d3.select(".ca");
+
+                    var group = svg.selectAll('g')
+                            .data(topojson.feature(ca, ca.objects.counties2).features)
+                            .enter()
+                            .append('g')
+
+                    var path = d3.geo.path().projection(projection);
+
+                    var LegendW = 80;
+                        LegendH = 20;
+
+                    var svg = d3.select("#countyMapSvg").append("svg:svg")
+                        .attr("class", "mapLegend")
+                        .attr("width", LegendW)
+                        .attr("height", LegendH)
+                        .attr("x", 0)
+                        .attr("y", 420)
+                        .style("display", "none");
+
+                    var gradient = svg.append("svg:defs")
+                      .append("svg:linearGradient")
+                        .attr("id", "gradient")
+                        .attr("x1", "100%")
+                        .attr("y1", "0%")
+                        .attr("x2", "0%")
+                        .attr("y2", "0%")
+                        .attr("spreadMethod", "pad");
+
+                    gradient.append("svg:stop")
+                        .attr("offset", "0%")
+                        .attr("stop-color", "rgb(35,132,67)")
+                        .attr("stop-opacity", 1);
+
+                    gradient.append("svg:stop")
+                        .attr("offset", "100%")
+                        .attr("stop-color", "rgb(255,245,96)")
+                        .attr("stop-opacity", 1);
+
+                    svg.append("svg:rect")
+                        .attr("width", LegendW)
+                        .attr("height", LegendH)
+                        .style("fill", "url(#gradient)");
+
+                    svg.append("text")
+                        .attr("text-anchor", "middle")
+                        .attr("x","15%")
+                        .attr("y","69%")
+                        .attr("dy",0)
+                        .style("font-size", "16px")
+                        .style("fill", "black")
+                        .text("-");
+
+                    svg.append("text")
+                        .attr("text-anchor", "middle")
+                        .attr("x","85%")
+                        .attr("y","65%")
+                        .attr("dy",0)
+                        .style("font-size", "14px")
+                        .style("fill", "white")
+                        .text("+");
+
+                    d3.selectAll(".radio").on("change", function(){
+
+                    if (document.getElementById("ac_tot").checked) {
+                            counties.transition().duration(250)
+                                 .style("fill", function (d) {return colorTOT(d.properties.ac_tot);});
+                            svg.transition().duration(300).style("display", null);
+                                 }
+
+                    else if (document.getElementById("ACR_NORM_1").checked) {
+                            counties.transition().duration(250)
+                                 .style("fill", function (d) {return colorACR(d.properties.ACR_NORM_1);});
+                            svg.transition().duration(300).style("display", null);
+                                 }
+
+                    else if (document.getElementById("POP_NORM").checked) {
+                            counties.transition().duration(250)
+                                 .style("fill", function (d) {return colorPOP(d.properties.POP_NORM);});
+                            svg.transition().duration(300).style("display", null);
+                                 }
+                               });
+
+                    var counties = group.append('path')
+                              .attr('d',path)
+                              .attr("class", function(d) { return "counties2 " + d.id; })
+                              .classed("geo", true)
+                              .attr("d", path)
+                              .style("fill", "LightGray")
+                              .on("mouseover", function(d) {
+                              div.transition().duration(300).style("opacity", 1);
+                              div.text(d.properties.name+" County")
+                              .style("left", (d3.event.pageX) + "px")
+                              .style("top", (d3.event.pageY -30) + "px");})
+                              .on("mouseout", function (d) { div.transition().duration(300).style("opacity", 0);})
+                              .on("click", function(d) {
+                              d3.select(".selected").classed("selected", false);
+                              d3.select(this).classed("selected", true).transition().duration(300);
+                              updatePie1(d.properties.name);
+                              updatePie2(d.properties.name);
+                              updateCountyName(d.properties.name+" County: "+d3.format(",")(d.properties.ac_tot)+" CPAD Acres");
+                          });
+
+                  });
+
+                  var updatePie1;
+                  var updatePie2;
+                  var updateCountyName;
+
+                  </script>
+
+                </svg>
+
+              </div>
+
+
+            </div>
+
+            <div id="div1" class="tab">
+
+              <svg id="countyHeaders"/>
+
+                <div id="countyTable" class="table">
+
+              <svg id="countyIndex" class="cell">
 
                 <script>
 
-                d3.json("caFields9.json", function(err, ca) {
+                  var index = [];
+                  for (var i = 1; i < 59; i++) {
+                      index.push(i);
+                  }
 
-                  var div = d3.select("body").append("div")
-                  .attr("class", "mapTooltip")
-                  .style("opacity", 0);
+                  var indexRect = d3.select("#countyIndex").selectAll("rect")
+                                   .data(index)
+                                   .enter()
+                                   .append("rect")
+                                   .attr("y", function(d, i) {
+                          			   		return i * 21;})
+                          			   .attr("x", 0)
+                          			   .attr("width", 20)
+                          			   .attr("height", 21)
+                                   .attr("fill", "white")
+                                   .classed("header", "true");
 
-                  var radio = d3.select(".ca")
-                              .append("input")
-                              .attr("type","Radio")
+                  var indexNumber = d3.select("#countyIndex").selectAll("text")
+                               .data(index)
+                               .enter()
+                               .append("text")
 
-                  var svg = d3.select(".ca");
+                               .attr("y", function(d, i) {
+                                   return (i*21) + 14;})
+                               .attr("x", 10)
+                               .attr("width", 20)
+                               .attr("height", 21)
+                               .attr("font-weight", "bold")
+                               .text(function (d, i) {
+                                 return d;
+                               });
 
-                  var group = svg.selectAll('g')
-                          .data(topojson.feature(ca, ca.objects.counties2).features)
-                          .enter()
-                          .append('g')
+                </script>
 
-                  var colorTOT = d3.scale.linear()
-                    .domain([30237, 993455, 12867928])
-                    .range(['rgb(255,245,96)','rgb(215,211,0)','rgb(35,132,67)'])
-                    .interpolate(d3.interpolateRgb);
+              </svg>
 
-                  var colorACR = d3.scale.linear()
-                    .domain([0.01, 0.3228, 0.95])
-                    .range(['rgb(255,245,96)','rgb(205,211,0)','rgb(35,132,67)'])
-                    .interpolate(d3.interpolateRgb);
+              <svg id="countyRow"/>
 
-                  var colorPOP = d3.scale.linear()
-                    .domain([0.01, 2.08, 368])
-                    .range(['rgb(255,245,96)','rgb(205,211,0)','rgb(35,132,67)'])
-                    .interpolate(d3.interpolateRgb);
+                <script>
 
-                  var projection = d3.geo.albers()
-                      .translate([70, 210])
-                      .scale(2700)
-                      .rotate([122.4183, 0])
-                      .center([0, 37.7750]);
+                var width = 500,
+                    height = 1000;
 
-                  var path = d3.geo.path().projection(projection);
+                var fieldHeight = 20;
+                var fieldWidth = 145;
 
-                  var LegendW = 80;
-                      LegendH = 20;
+                var canvasH = d3.select("#countyHeaders")
+                    .attr("width", width)
+                    .attr("height", fieldHeight)
+                    .attr("x", 20)
+                    .append("g");
 
-                  var svg = d3.select("#countyMapSvg").append("svg:svg")
-                      .attr("class", "mapLegend")
-                      .attr("width", LegendW)
-                      .attr("height", LegendH)
-                      .attr("x", 0)
-                      .attr("y", 420)
-                      .style("display", "none");
+                var canvasR = d3.select("#countyRow")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .append("g");
 
-                  var gradient = svg.append("svg:defs")
-                    .append("svg:linearGradient")
-                      .attr("id", "gradient")
-                      .attr("x1", "100%")
-                      .attr("y1", "0%")
-                      .attr("x2", "0%")
-                      .attr("y2", "0%")
-                      .attr("spreadMethod", "pad");
+                var headerGrp = canvasH.append("g")
+                                .attr("class", "headerGrp")
+                                .attr("x", 20);
+                var rowsGrp = canvasR.append("g")
+                              .attr("class","rowsGrp");
 
-                  gradient.append("svg:stop")
-                      .attr("offset", "0%")
-                      .attr("stop-color", "rgb(35,132,67)")
-                      .attr("stop-opacity", 1);
+                var previousSort = null;
 
-                  gradient.append("svg:stop")
-                      .attr("offset", "100%")
-                      .attr("stop-color", "rgb(255,245,96)")
-                      .attr("stop-opacity", 1);
+                d3.json("Counties_stats_3col.json", function(data) {
 
-                  svg.append("svg:rect")
-                      .attr("width", LegendW)
-                      .attr("height", LegendH)
-                      .style("fill", "url(#gradient)");
+                refreshTable(null);
 
-                  svg.append("text")
-                      .attr("text-anchor", "middle")
-                      .attr("x","15%")
-                      .attr("y","69%")
-                      .attr("dy",0)
-                      .style("font-size", "16px")
-                      .style("fill", "black")
-                      .text("-");
+                function refreshTable(sortOn){
 
-                  svg.append("text")
-                      .attr("text-anchor", "middle")
-                      .attr("x","85%")
-                      .attr("y","65%")
-                      .attr("dy",0)
-                      .style("font-size", "14px")
-                      .style("fill", "white")
-                      .text("+");
+                  // create the table header
+                  var header = headerGrp.selectAll("g")
+                    .data(d3.keys(data[0]))
+                    .enter().append("g")
+                    .attr("class", "header")
+                    .attr("transform", function (d, i){
+                      return "translate("+ i* fieldWidth + ",0)";
+                    })
+                    .on("click", function(d, i){
+                      d3.select(".selected").classed("selected", false);
+                      d3.select(this).classed("selected", true).transition().duration(300);
+                      if (i>0) {return refreshTable(d);};});
 
-                  d3.selectAll(".radio").on("change", function(){
+                  header.append("rect")
+                    .attr("width", fieldWidth + 30)
+                    .attr("height", fieldHeight)
+                  //  .attr("x", 20)
+                    .style("border", "2px red solid");
 
-                  if (document.getElementById("ac_tot").checked) {
-                          counties.transition().duration(250)
-                               .style("fill", function (d) {return colorTOT(d.properties.ac_tot);});
-                          svg.transition().duration(300).style("display", null);
-                               }
+                  header.append("text")
+                    .attr("x", fieldWidth/2 + 25)
+                    .attr("y", fieldHeight/2)
+                    .attr("dy", ".35em")
+                    .text(function (d) { return d;});
 
-                  else if (document.getElementById("ACR_NORM_1").checked) {
-                          counties.transition().duration(250)
-                               .style("fill", function (d) {return colorACR(d.properties.ACR_NORM_1);});
-                          svg.transition().duration(300).style("display", null);
-                               }
+                  // fill the table
+                  // select rows
+                  var rows = rowsGrp.selectAll("g.row").data(data,
+                    function(d){ return d.County; });
 
-                  else if (document.getElementById("POP_NORM").checked) {
-                          counties.transition().duration(250)
-                               .style("fill", function (d) {return colorPOP(d.properties.POP_NORM);});
-                          svg.transition().duration(300).style("display", null);
-                               }
-                             });
+                  // create rows
+                  var rowsEnter = rows.enter().append("svg:g")
+                    .attr("class","row")
+                    .attr("transform", function (d, i){
+                      return "translate(0," + (i) * (fieldHeight+1) + ")";
+                    })
+                  //  .on("mouseover", function () {rowsEnter.style("fill", "white")})
+                    .on("click", function(d) {
+                                            d3.select(".selected").classed("selected", false);
+                                            d3.select(this).classed("selected", true).transition().duration(300);
+                                            updatePie1(d.County);
+                                            updatePie2(d.County);
+                                            updateCountyName(d.County+" County: "+d3.format(",")(d["Total CPAD Acreage"])+" CPAD Acres");
+                                          });
 
-                  var counties = group.append('path')
-                            .attr('d',path)
-                            .attr("class", function(d) { return "counties2 " + d.id; })
-                            .classed("geo", true)
-                            .attr("d", path)
-                            .style("fill", "LightGray")
-                            .on("mouseover", function(d) {
-                            div.transition().duration(300).style("opacity", 1);
-                            div.text(d.properties.name+" County")
-                            .style("left", (d3.event.pageX) + "px")
-                            .style("top", (d3.event.pageY -30) + "px");})
-                            .on("mouseout", function (d) { div.transition().duration(300).style("opacity", 0);})
-                            .on("click", function(d) {
-                            d3.select(".selected").classed("selected", false);
-                            d3.select(this).classed("selected", true).transition().duration(300);
-                            updatePie1(d.properties.name);
-                            updatePie2(d.properties.name);
-                            updateCountyName(d.properties.name+" County: "+d3.format(",")(d.properties.ac_tot)+" CPAD Acres");
+                  // select cells
+                  var cells = rows.selectAll("g.cell").data(function(d){
+                      return d3.values(d);
+                    })
+                    .style("border", "2px black solid");
+
+                  // create cells
+                  var cellsEnter = cells.enter().append("svg:g")
+                    .attr("class", "cell")
+                    .attr("transform", function (d, i){
+                      return "translate(" + i * fieldWidth + ",0)";
+                    })
+                    .style("border", "2px black solid");
+
+                  cellsEnter.append("rect")
+                    .attr("width", fieldWidth)
+                    .attr("height", fieldHeight);
+
+                  cellsEnter.append("text")
+                    .attr("x", fieldWidth / 2)
+                    .attr("y", fieldHeight / 2)
+                    .attr("dy", ".35em")
+                    .text( function (d) { if (typeof d == "number") {
+                      return d3.format(',')(d);}
+                      else {return d;}
+                      })
+                    .style("border", "2px black solid");
+
+                  //update if not in initialisation
+                  if(sortOn !== null) {
+                      // update rows
+                      rows.sort(function(a,b){return sort(b[sortOn], a[sortOn]);});
+                      previousSort = null;
+
+                      rows.transition()
+                        .duration(500)
+                        .attr("transform", function (d, i){
+                          return "translate(0," + (i) * (fieldHeight+1) + ")";
                         });
+                  }
+                }
+
+                function sort(a,b){
+                    return a > b ? 1 : a == b ? 0 : -1;
+                }
 
                 });
 
@@ -266,6 +465,65 @@
               </svg>
 
             </div>
+
+            </div>
+          </div>
+
+          <script type="text/javascript" >
+          (function(){
+      var tabs = document.getElementById("tabs");
+      var nav = tabs.getElementsByTagName("input");
+
+      /*
+      * Hide all tabs
+      */
+      function hideTab1(){
+        var tab1 = document.getElementById("div1");
+            tab1.className = tab1.className + " hide";
+      }
+
+      function hideTab2(){
+        var tab2 = document.getElementById("div2");
+            tab2.className = tab2.className + " hide";
+      }
+
+      hideTab1();
+      hideTab2(); /* hide tabs on load */
+
+       /*
+      * Hide all tabs
+      */
+      function hideTabs(){
+        var tab = tabs.getElementsByTagName('div');
+        for(var i=0;i<=nav.length;i++){
+          if(tab[i].className == 'tab'){
+            tab[i].className = tab[i].className + ' hide';
+          }
+        }
+      }
+
+      /*
+      * Show the clicked tab
+      */
+      function showTab(tab){
+        document.getElementById(tab).className = "tab";
+      }
+
+
+      /*
+      * Add click events
+      */
+      for(var i=0;i<nav.length;i++){
+        nav[i].onclick = function(){
+          hideTabs();
+          showTab(this.className);
+        }
+      }
+
+      showTab("div2");
+    }) ();
+
+  </script>
 
             <div id="countyPies" class="pie">
 

@@ -113,3 +113,92 @@ opacity:0.8;}
 label {
   float: left;
 }
+
+.header rect{
+  fill: #444;
+}
+
+.header text{
+  fill: white;
+  font-size: 10px;
+  font-family: Helvetica, Arial,inherit;
+  text-anchor: middle;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.header:hover{
+  cursor: pointer;
+}
+
+.cell rect{
+  fill: white;
+  border-bottom: 2px black;
+}
+
+.cell rect:hover {
+  fill: none;
+}
+
+.rowsGrp {
+  clear: both;
+  border-bottom: 2px black;
+}
+
+.row {
+  fill: black;
+  border: 5px dotted black;
+  border-bottom: 2px black;
+}
+
+.row:hover{
+  opacity: 0.5;
+  cursor: pointer;
+  color: red;
+  border-bottom: 2px black;
+  padding: -10px;
+}
+
+.cell text{
+  font-size: 10px;
+  fill: #444;
+  font-family: Helvetica, Arial,inherit;
+  text-anchor: middle;
+}
+
+.row.selected {
+    fill-opacity: 0.7;
+    fill: red;
+}
+
+#countyTable{
+overflow: scroll;
+height: 500px;
+float: left;
+width: 467px;
+}
+
+#countyRow{
+display: block;
+width: 95%;
+height: 1217px;
+float: right;
+}
+
+#countyIndex {
+  float: left;
+  width: 20px;
+  height: 1217px;
+}
+
+#countyPies {
+  float:right
+}
+
+.hide{
+    display:none;
+  }
+
+#nav {
+  float: left;
+}
