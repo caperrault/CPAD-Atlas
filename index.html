@@ -111,22 +111,30 @@
 
             <div id="tabs">
 
-            <div id="nav">
-              <p>Map view<input type="radio" name="tab" value="pkfrom" class="div2" checked /></p>
-              <p>Table view<input type="radio" name="tab" value="pkfrom" class="div1" /></p>
-            </div>
+            <form id="nav">
+              <label>Map view<input type="radio" name="tab" value="pkfrom" class="div2" checked /></label>
+              <label>Table view<input type="radio" name="tab" value="pkfrom" class="div1" /></label>
+            </form>
 
             <div id="div2" class="tab">
 
               <div id="countyMap" class="map">
 
-<!--
-                <div>
+              <div>
                 <form>
                   <label><input type="Radio" name="dataset" id="ac_tot" class="radio" value="ac_tot"> Total Acreage</label>
                   <label><input type="Radio" name="dataset" id="ACR_NORM_1" class="radio" value="ACR_NORM_1"> Normalized by County Acreage</label>
                   <label><input type="Radio" name="dataset" id="POP_NORM" class="radio" value="POP_NORM"> Acres per Inhabitant</label>
                 </form>
+              </div>
+
+
+              <!--<div>
+                <select id="colorSelect">
+                  <option value="Pick a scale" selected disabled>Pick a scale</option>
+                  <option id="ac_tot" value="ac_tot">Total CPAD Acreage</option>
+                  <option id="POP_NORM" value="POP_NORM">CPAD Acres per 1,000 Inh.</option>
+                </select>
               </div>-->
 
                 <svg id="countyMapSvg" class="ca">
@@ -226,21 +234,21 @@
                         .style("fill", "white")
                         .text("+");
 
-                    d3.selectAll(".radio").on("change", function(){
+                    d3.select("#colorSelect").on("change", function(){
 
-                    if (document.getElementById("ac_tot").checked) {
+                    if (document.getElementById("ac_tot").selected) {
                             counties.transition().duration(250)
                                  .style("fill", function (d) {return colorTOT(d.properties.ac_tot);});
                             svg.transition().duration(300).style("display", null);
                                  }
 
-                    else if (document.getElementById("ACR_NORM_1").checked) {
+                  /*  else if (document.getElementById("ACR_NORM_1").checked) {
                             counties.transition().duration(250)
                                  .style("fill", function (d) {return colorACR(d.properties.ACR_NORM_1);});
-                            svg.transition().duration(300).style("display", null);
-                                 }
+                            svg.transition().duration(300).style("display", null);*/
+                            //     }
 
-                    else if (document.getElementById("POP_NORM").checked) {
+                    else  {
                             counties.transition().duration(250)
                                  .style("fill", function (d) {return colorPOP(d.properties.POP_NORM);});
                             svg.transition().duration(300).style("display", null);
@@ -284,7 +292,7 @@
 
             <div id="div1" class="tab">
 
-              <svg id="countyHeaders"/>
+              <svg id="countyHeaders" />
 
                 <div id="countyTable" class="table">
 
@@ -307,7 +315,7 @@
                           			   .attr("width", 20)
                           			   .attr("height", 21)
                                    .attr("fill", "white")
-                                   .classed("header", "true");
+                                   .classed("tableHeader", "true");
 
                   var indexNumber = d3.select("#countyIndex").selectAll("text")
                                .data(index)
@@ -367,7 +375,7 @@
                   var header = headerGrp.selectAll("g")
                     .data(d3.keys(data[0]))
                     .enter().append("g")
-                    .attr("class", "header")
+                    .attr("class", "tableHeader")
                     .attr("transform", function (d, i){
                       return "translate("+ i* fieldWidth + ",0)";
                     })
@@ -472,7 +480,10 @@
           <script type="text/javascript" >
           (function(){
       var tabs = document.getElementById("tabs");
-      var nav = tabs.getElementsByTagName("input");
+      var nav = $("input:radio[name=tab]").click(function() {
+                var value = $(this).val();
+                });
+      //var nav = tabs.getElementsByTagName("input");
 
       /*
       * Hide all tabs
@@ -490,14 +501,11 @@
       hideTab1();
       hideTab2(); /* hide tabs on load */
 
-       /*
-      * Hide all tabs
-      */
       function hideTabs(){
-        var tab = tabs.getElementsByTagName('div');
-        for(var i=0;i<=nav.length;i++){
-          if(tab[i].className == 'tab'){
-            tab[i].className = tab[i].className + ' hide';
+        var tab = tabs.getElementsByTagName("div");
+        for(var i=0;i<=nav.length+1;i++){
+          if(tab[i].className == "tab"){
+            tab[i].className = tab[i].className + " hide";
           }
         }
       }
@@ -508,7 +516,6 @@
       function showTab(tab){
         document.getElementById(tab).className = "tab";
       }
-
 
       /*
       * Add click events
@@ -618,7 +625,7 @@
                           .text("Protected areas by access")
                           .attr("fill", "#444");
 
-                        d3.select("select").on("change.1", change);
+                        d3.select().on("change.1", change);
 
                         function change() {
                           setValue(this.value)
@@ -732,7 +739,7 @@
                                                              .attr("height", 50)
                                                              .style("display", "none");
 
-                             d3.selectAll("select").on("change.2", change);
+                             d3.select().on("change.2", change);
 
                             function change() {
                               setValue(this.value);
