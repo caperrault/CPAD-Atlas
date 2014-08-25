@@ -123,19 +123,9 @@
               <div>
                 <form>
                   <label><input type="Radio" name="dataset" id="ac_tot" class="radio" value="ac_tot"> Total Acreage</label>
-                  <label><input type="Radio" name="dataset" id="ACR_NORM_1" class="radio" value="ACR_NORM_1"> Normalized by County Acreage</label>
                   <label><input type="Radio" name="dataset" id="POP_NORM" class="radio" value="POP_NORM"> Acres per Inhabitant</label>
                 </form>
               </div>
-
-
-              <!--<div>
-                <select id="colorSelect">
-                  <option value="Pick a scale" selected disabled>Pick a scale</option>
-                  <option id="ac_tot" value="ac_tot">Total CPAD Acreage</option>
-                  <option id="POP_NORM" value="POP_NORM">CPAD Acres per 1,000 Inh.</option>
-                </select>
-              </div>-->
 
                 <svg id="countyMapSvg" class="ca">
 
@@ -234,26 +224,21 @@
                         .style("fill", "white")
                         .text("+");
 
-                    d3.select("#colorSelect").on("change", function(){
+              d3.selectAll(".radio").on("change", function(){
 
-                    if (document.getElementById("ac_tot").selected) {
-                            counties.transition().duration(250)
-                                 .style("fill", function (d) {return colorTOT(d.properties.ac_tot);});
-                            svg.transition().duration(300).style("display", null);
-                                 }
+                  if (document.getElementById("ac_tot").checked) {
+                          counties.transition().duration(250)
+                               .style("fill", function (d) {return colorTOT(d.properties.ac_tot);});
+                          svg.transition().duration(300).style("display", null);
+                               }
 
-                  /*  else if (document.getElementById("ACR_NORM_1").checked) {
-                            counties.transition().duration(250)
-                                 .style("fill", function (d) {return colorACR(d.properties.ACR_NORM_1);});
-                            svg.transition().duration(300).style("display", null);*/
-                            //     }
+                  else if (document.getElementById("POP_NORM").checked) {
+                          counties.transition().duration(250)
+                               .style("fill", function (d) {return colorPOP(d.properties.POP_NORM);});
+                          svg.transition().duration(300).style("display", null);
+                               }
+                             });
 
-                    else  {
-                            counties.transition().duration(250)
-                                 .style("fill", function (d) {return colorPOP(d.properties.POP_NORM);});
-                            svg.transition().duration(300).style("display", null);
-                                 }
-                               });
 
                     var counties = group.append('path')
                               .attr('d',path)
