@@ -30,7 +30,6 @@ h2 {
 .content {
   padding-right: 50%;
   padding-top: 10px;
-  padding-bottom: 10px;
 }
 
 .counties2 {
@@ -180,6 +179,10 @@ label {
     fill: red;
 }
 
+#tabs {
+  clear: both;
+}
+
 #countyTable{
 overflow: scroll;
 height: 500px;
@@ -210,6 +213,79 @@ float: right;
   }
 
 #nav {
-  width: 100%;
-  height: 50px;
+  float: left;
+  width: 150px;
+  margin-bottom: 40px;
+}
+
+.switch {
+  position: relative;
+}
+
+.switch-label {
+  position: relative;
+  z-index: 2;
+  float: left;
+  width: 75px;
+  line-height: 22px;
+  font-size: 12px;
+  font-family: font-family: Helvetica, Arial,inherit;
+  color: #444;
+  text-align: center;
+  cursor: pointer;
+}
+
+/*.switch-label-off {
+  border: 1px #444 solid;
+  border-radius: 3px;
+  height: 18px;
+}
+
+.switch-label-on {
+  border: 1px #444 solid;
+  border-radius: 3px;
+  height: 18px;
+}*/
+
+.div1 {
+  display: none;
+}
+
+.div1:checked + .switch-label {
+  font-weight: bold;
+  transition: 0.15s ease-out;
+  color: rgb(255, 255, 255);
+}
+
+.div1:checked + .switch-label-on ~ .switch-selection {
+  left: 75px;
+}
+
+.div2 {
+  display: none;
+}
+
+.div2:checked + .switch-label-on ~ .switch-selection {
+  left: 72px;
+}
+
+.div2:checked + .switch-label {
+  font-weight: bold;
+  transition: 0.15s ease-out;
+  color: rgb(255, 255, 255);
+}
+
+.switch-selection {
+  position: absolute;
+  z-index: 1;
+  top: 2px;
+  left: 2px;
+  display: block;
+  width: 72px;
+  height: 18px;
+  border-radius: 3px;
+  transition: left 0.15s ease-out;
+}
+.switch-blue .switch-selection {
+  background-color: #444;
 }

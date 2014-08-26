@@ -109,12 +109,28 @@
             <div class="content"><p>California counties are inequally wealthy in protected areas. The map below shows the distribution of protected areas throughout the 58 counties, either in terms of <strong>total acreage</strong> or <strong>acreage per inhabitant</strong>. <strong>Click on any county</strong> to take a deeper look into its protected areas.</p>
             </div>
 
+            <form id="nav" class="switch switch-blue">
+                <input type="radio" class="div2" name="viewTab" id="week2" checked>
+                <label for="week2" class="switch-label switch-label-off">Map View</label>
+                <input type="radio" class="div1" name="viewTab" id="month2">
+                <label for="month2" class="switch-label switch-label-on">Table View</label>
+              <span class="switch-selection"></span>
+            </form>
+
             <div id="tabs">
 
-            <form id="nav">
-              <label>Map view<input type="radio" name="tab" value="pkfrom" class="div2" checked /></label>
-              <label>Table view<input type="radio" name="tab" value="pkfrom" class="div1" /></label>
-            </form>
+          <!--  <form id="nav">
+              <label>Map view<input type="radio" name="viewTab" class="div2" checked /></label>
+              <label>Table view<input type="radio" name="viewTab" class="div1" /></label>
+            </form>-->
+
+              <!--  <div class="switch switch-blue">
+      <input type="radio" class="switch-input" name="view2" value="week2" id="week2" checked>
+      <label for="week2" class="switch-label switch-label-off">AGREE</label>
+      <input type="radio" class="switch-input" name="view2" value="month2" id="month2">
+      <label for="month2" class="switch-label switch-label-on">DISAGREE</label>
+      <span class="switch-selection"></span>
+    </div> -->
 
             <div id="div2" class="tab">
 
@@ -465,7 +481,7 @@
           <script type="text/javascript" >
           (function(){
       var tabs = document.getElementById("tabs");
-      var nav = $("input:radio[name=tab]").click(function() {
+      var nav = $("input:radio[name=viewTab]").click(function() {
                 var value = $(this).val();
                 });
       //var nav = tabs.getElementsByTagName("input");
