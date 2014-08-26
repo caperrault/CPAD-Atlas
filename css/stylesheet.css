@@ -88,6 +88,18 @@ position: left;
 right: 10px;
 top: 10px;
 padding: 0px 20px 20px 0px;
+cursor: pointer;
+}
+
+.mapScale {
+  cursor: pointer;
+}
+
+.mapScale label {
+  padding-right: 20px;
+  cursor: pointer;
+  font-weight: normal;
+  font-size: 10px;
 }
 
 .legend rect {
@@ -97,7 +109,7 @@ stroke:black;
 opacity:0.8;}
 
 .ca {
-  width: 50%;
+  width: 500px;
   height: 500px;
   float: left;
   clear:left;
@@ -132,7 +144,7 @@ label {
 }
 
 .tableHeader:hover{
-  cursor: pointer;
+  cursor: s-resize;
 }
 
 #countyHeaders {
@@ -181,6 +193,7 @@ label {
 
 #tabs {
   clear: both;
+  float: left;
 }
 
 #countyTable{
@@ -215,7 +228,6 @@ float: right;
 #nav {
   float: left;
   width: 150px;
-  margin-bottom: 40px;
 }
 
 .switch {
@@ -288,4 +300,11 @@ float: right;
 }
 .switch-blue .switch-selection {
   background-color: #444;
+}
+
+input[name="dataset"] {
+    -webkit-appearance: checkbox;
+    -moz-appearance: checkbox;
+    -ms-appearance: checkbox;     /* not currently supported */
+    -o-appearance: checkbox;      /* not currently supported */
 }
