@@ -119,11 +119,6 @@
 
             <div id="tabs">
 
-          <!--  <form id="nav">
-              <label>Map view<input type="radio" name="viewTab" class="div2" checked /></label>
-              <label>Table view<input type="radio" name="viewTab" class="div1" /></label>
-            </form>-->
-
             <div id="div2" class="tab">
 
               <div id="countyMap" class="map">
@@ -139,6 +134,8 @@
 
                   <script>
 
+                  var selectedCounty;
+
                   d3.json("caFields9.json", function(err, ca) {
 
                     var div = d3.select("body").append("div")
@@ -152,11 +149,6 @@
                     var colorTOT = d3.scale.linear()
                       .domain([30237, 993455, 12867928])
                       .range(['rgb(255,245,96)','rgb(215,211,0)','rgb(35,132,67)'])
-                      .interpolate(d3.interpolateRgb);
-
-                    var colorACR = d3.scale.linear()
-                      .domain([0.01, 0.3228, 0.95])
-                      .range(['rgb(255,245,96)','rgb(205,211,0)','rgb(35,132,67)'])
                       .interpolate(d3.interpolateRgb);
 
                     var colorPOP = d3.scale.linear()
@@ -247,12 +239,15 @@
                                }
                              });
 
-
-                    var counties = group.append('path')
-                              .attr('d',path)
-                              .attr("class", function(d) { return "counties2 " + d.id; })
+                    var counties = group.append("path")
+                              .attr("d",path)
+                              .classed("selected", function(d) { if (d.properties.name === selectedCounty) {
+                                return true;
+                              }
+                              else { return false; }
+                            })
+                              .attr("class", "counties2")
                               .classed("geo", true)
-                              .attr("d", path)
                               .style("fill", "LightGray")
                               .on("mouseover", function(d) {
                               div.transition().duration(300).style("opacity", 1);
@@ -263,16 +258,12 @@
                               .on("click", function(d) {
                               d3.select(".selected").classed("selected", false);
                               d3.select(this).classed("selected", true).transition().duration(300);
+                              selectedCounty = d.properties.name;
                               updatePie1(d.properties.name);
                               updatePie2(d.properties.name);
                               updateCountyName(d.properties.name+" County: "+d3.format(",")(d.properties.ac_tot)+" CPAD Acres");
                           });
-
                   });
-
-                  var updatePie1;
-                  var updatePie2;
-                  var updateCountyName;
 
                   </script>
 
@@ -396,7 +387,12 @@
 
                   // create rows
                   var rowsEnter = rows.enter().append("svg:g")
-                    .attr("class","row")
+                    .attr("class", "row")
+                    .classed("selected", function(d) { if (d.County === selectedCounty) {
+                      return true;
+                    }
+                    else { return false;}
+                  })
                     .attr("transform", function (d, i){
                       return "translate(0," + (i) * (fieldHeight+1) + ")";
                     })
@@ -404,6 +400,7 @@
                     .on("click", function(d) {
                                             d3.select(".selected").classed("selected", false);
                                             d3.select(this).classed("selected", true).transition().duration(300);
+                                            selectedCounty = d.County;
                                             updatePie1(d.County);
                                             updatePie2(d.County);
                                             updateCountyName(d.County+" County: "+d3.format(",")(d["Total CPAD Acreage"])+" CPAD Acres");
