@@ -99,14 +99,14 @@
 
 		      <h2 style="padding-top:0;">CPAD Atlas</h2>
 
-          <div class="content"><p>CPAD contains data about California lands protected for open space purposes and owned in fee by agencies and organizations. More than <strong>101,174,000 acres</strong> of protected land are now inventoried in CPAD. The land is owned by more than <strong>900 government agencies, non-profit and other organizations</strong>, for the CPAD 2014a (February 2014) release.</p>
+          <div class="content"><p>CPAD contains data about California lands protected for open space purposes and owned in fee by agencies and organizations. More than <strong>49,000,000 acres</strong> of protected land are now inventoried in CPAD. The land is owned by more than <strong>900 government agencies, non-profit and other organizations</strong>, for the CPAD 2014a (February 2014) release.</p>
           </div>
 
           <h3>CPAD Data per County</h3>
 
           <div id="countyChapter">
 
-            <div class="content"><p>California counties are inequally wealthy in protected areas. The map below shows the distribution of protected areas throughout the 58 counties, either in terms of <strong>total acreage</strong> or <strong>acreage per inhabitant</strong>. <strong>Click on any county</strong> to take a deeper look into its protected areas.</p>
+            <div class="content"><p>California counties are inequally wealthy in protected areas. The map below shows the distribution of protected areas throughout the 58 counties, either in terms of <strong>total acreage</strong> or <strong>acreage per inhabitant</strong>. <strong>Click on any county on the map or in the table</strong> to take a deeper look into its protected areas.</p>
             </div>
 
             <form id="nav" class="switch switch-blue">
@@ -261,7 +261,9 @@
                               selectedCounty = d.properties.name;
                               updatePie1(d.properties.name);
                               updatePie2(d.properties.name);
-                              updateCountyName(d.properties.name+" County: "+d3.format(",")(d.properties.ac_tot)+" CPAD Acres");
+                              updateCountyName(d.properties.name+" County:");
+                              updateCountyTot(d3.format(",")(d.properties.ac_tot)+" CPAD acres");
+                              updateCountyInh(d3.format(",")(d.properties.POP_NORM)+" CPAD acres per 1,000 inhabitants");
                           });
                   });
 
@@ -363,9 +365,11 @@
                     .attr("transform", function (d, i){
                       return "translate("+ i* fieldWidth + ",0)";
                     })
+                    .style("cursor", function (d, i) {
+                      if (i>0) { return "s-resize";}
+                      else { return "default";}
+                    })
                     .on("click", function(d, i){
-                      d3.select(".selected").classed("selected", false);
-                      d3.select(this).classed("selected", true).transition().duration(300);
                       if (i>0) {return refreshTable(d);};});
 
                   header.append("rect")
@@ -378,7 +382,11 @@
                     .attr("x", fieldWidth/2 + 25)
                     .attr("y", fieldHeight/2)
                     .attr("dy", ".35em")
-                    .text(function (d) { return d;});
+                  //  .style("color", "red")
+                    .text(function (d) { return d;})
+                  /*  .on("click", function (d, i) {
+                      d3.select(this).style("color", "red");
+                    });*/
 
                   // fill the table
                   // select rows
@@ -403,7 +411,9 @@
                                             selectedCounty = d.County;
                                             updatePie1(d.County);
                                             updatePie2(d.County);
-                                            updateCountyName(d.County+" County: "+d3.format(",")(d["Total CPAD Acreage"])+" CPAD Acres");
+                                            updateCountyName(d.County+" County:");
+                                            updateCountyTot(d3.format(",")(d["Total CPAD Acreage"])+" CPAD acres");
+                                            updateCountyInh(d3.format(",")(d["CPAD Acres per 1,000 Inh."])+" CPAD acres per 1,000 inhabitants");
                                           });
 
                   // select cells
@@ -457,6 +467,8 @@
                 var updatePie1;
                 var updatePie2;
                 var updateCountyName;
+                var updateCountyTot;
+                var updateCountyInh;
 
                 </script>
 
@@ -525,6 +537,10 @@
             <div id="countyPies" class="pie">
 
               <svg id="countyName" class="selectedElement" style="height: 35px; width: 100%;"></svg>
+
+              <svg id="countyTot" class="selectedElement" style="height: 20px; width: 100%;"></svg>
+
+              <svg id="countyInh" class="selectedElement" style="height: 20px; width: 100%;"></svg>
 
               <svg id="countyPie1" class="pieChart" style="height: 232px; width: 100%;"></svg>
 
@@ -729,11 +745,23 @@
                                                              .attr("height", 50)
                                                              .style("display", "none");
 
+                              var countyTotSvg = d3.select("#countyTot").append("svg")
+                                                             .attr("width", 600)
+                                                             .attr("height", 20)
+                                                             .style("display", "none");
+
+                              var countyInhSvg = d3.select("#countyInh").append("svg")
+                                                             .attr("width", 600)
+                                                             .attr("height", 20)
+                                                             .style("display", "none");
+
                              d3.select().on("change.2", change);
 
                             function change() {
                               setValue(this.value);
                               setCountyValue(this.properties.name);
+                              setTotValue(this.properties.ac_tot);
+                              setInhValue(this.properties.POP_NORM);
                             };
 
                             function setValue(value) {
@@ -762,8 +790,44 @@
                                             .attr("font-size", "2em");
                             };
 
+                            function setTotValue(tot) {
+                              countyTotRect = countyTotSvg.style("display", null)
+                                            .append('rect')
+                                            .attr("width", 600)
+                                            .attr("height", 20)
+                                            .style('fill', "white");
+                              countyTot = countyTotSvg.style("display", null)
+                                            .append("text")
+                                            .attr("text-anchor", "left")
+                                            .attr("x","0%")
+                                            .attr("y","50%")
+                                            .text(function() { return tot})
+                                            .attr("fill", "#444")
+                                            .attr("font-weight", "bold")
+                                            .attr("font-size", "1em");
+                            };
+
+                            function setInhValue(inh) {
+                              countyInhRect = countyInhSvg.style("display", null)
+                                            .append('rect')
+                                            .attr("width", 600)
+                                            .attr("height", 20)
+                                            .style('fill', "white");
+                              countyInh = countyInhSvg.style("display", null)
+                                            .append("text")
+                                            .attr("text-anchor", "left")
+                                            .attr("x","0%")
+                                            .attr("y","50%")
+                                            .text(function() { return inh})
+                                            .attr("fill", "#444")
+                                            .attr("font-weight", "bold")
+                                            .attr("font-size", "1em");
+                            };
+
                             updatePie2 = setValue;
                             updateCountyName = setCountyValue;
+                            updateCountyTot = setTotValue;
+                            updateCountyInh = setInhValue;
 
                             function arcTween(a) {
                               var i = d3.interpolate(this._current, a);

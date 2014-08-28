@@ -79,7 +79,6 @@ path.chart:hover {
 
 path.selected {
     fill-opacity: 0.5;
-    fill: red;
 }
 
 form {
@@ -143,16 +142,12 @@ label {
   padding: 10px;
 }
 
-.tableHeader:hover{
-  cursor: s-resize;
-}
-
 #countyHeaders {
   float: left;
 }
 
 .cell rect{
-  fill: white;
+  fill: none;
   border-bottom: 2px black;
 }
 
@@ -162,12 +157,11 @@ label {
 
 .rowsGrp {
   clear: both;
-  border-bottom: 2px black;
 }
 
 .row {
   fill: black;
-  border: 5px dotted black;
+  border: 5px solid black;
   border-bottom: 2px black;
 }
 
@@ -175,7 +169,6 @@ label {
   opacity: 0.5;
   cursor: pointer;
   color: red;
-  border-bottom: 2px black;
   padding: -10px;
 }
 
@@ -184,11 +177,15 @@ label {
   fill: #444;
   font-family: Helvetica, Arial,inherit;
   text-anchor: middle;
+  background: none;
 }
 
 .row.selected {
     fill-opacity: 0.7;
-    fill: red;
+    font-weight: bold;
+    font-size: 14px;
+    opacity: 1;
+    background: black;
 }
 
 #tabs {
@@ -200,15 +197,17 @@ label {
 overflow: scroll;
 height: 500px;
 float: left;
-width: 467px;
+width: 463px;
 clear: both;
+border: 1px dotted lightGray;
 }
 
-#countyRow{
+#countyRow {
 display: block;
 width: 95%;
 height: 1217px;
 float: right;
+border-left: 1px dotted lightGray;
 }
 
 #countyIndex {
@@ -246,18 +245,6 @@ float: right;
   text-align: center;
   cursor: pointer;
 }
-
-/*.switch-label-off {
-  border: 1px #444 solid;
-  border-radius: 3px;
-  height: 18px;
-}
-
-.switch-label-on {
-  border: 1px #444 solid;
-  border-radius: 3px;
-  height: 18px;
-}*/
 
 .div1 {
   display: none;
@@ -305,6 +292,6 @@ float: right;
 input[name="dataset"] {
     -webkit-appearance: checkbox;
     -moz-appearance: checkbox;
-    -ms-appearance: checkbox;     /* not currently supported */
-    -o-appearance: checkbox;      /* not currently supported */
+    -ms-appearance: checkbox;
+    -o-appearance: checkbox;
 }
