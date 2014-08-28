@@ -224,6 +224,17 @@
                         .style("fill", "white")
                         .text("+");
 
+              function selectCounty(name) {
+                selectedCounty = name;
+                d3.selectAll(“.county”)
+                  .classed(“selected”, function(d) { if
+                    (d.properties.name == name) {
+                      return true;
+                    }
+                    else {return false;}
+                  });
+              };
+
               d3.selectAll(".radio").on("change", function(){
 
                   if (document.getElementById("ac_tot").checked) {
@@ -241,12 +252,13 @@
 
                     var counties = group.append("path")
                               .attr("d",path)
-                              .classed("selected", function(d) { if (d.properties.name === selectedCounty) {
+                              .attr("class", "county")
+                            /*  .classed("selected", function(d) { if (d.properties.name === selectedCounty) {
                                 return true;
                               }
                               else { return false; }
-                            })
-                              .attr("class", "counties2")
+                            })*/
+                            //  .attr("class", "counties2")
                               .classed("geo", true)
                               .style("fill", "LightGray")
                               .on("mouseover", function(d) {
@@ -256,8 +268,8 @@
                               .style("top", (d3.event.pageY -30) + "px");})
                               .on("mouseout", function (d) { div.transition().duration(300).style("opacity", 0);})
                               .on("click", function(d) {
-                              d3.select(".selected").classed("selected", false);
-                              d3.select(this).classed("selected", true).transition().duration(300);
+                            //  d3.select(".selected").classed("selected", false);
+                            //  d3.select(this).classed("selected", true).transition().duration(300);
                               selectedCounty = d.properties.name;
                               updatePie1(d.properties.name);
                               updatePie2(d.properties.name);
@@ -265,6 +277,7 @@
                               updateCountyTot(d3.format(",")(d.properties.ac_tot)+" CPAD acres");
                               updateCountyInh(d3.format(",")(d.properties.POP_NORM)+" CPAD acres per 1,000 inhabitants");
                           });
+
                   });
 
                   </script>
@@ -396,11 +409,12 @@
                   // create rows
                   var rowsEnter = rows.enter().append("svg:g")
                     .attr("class", "row")
-                    .classed("selected", function(d) { if (d.County === selectedCounty) {
+                    //.attr("class", "county")
+                /*    .classed("selected", function(d) { if (d.County === selectedCounty) {
                       return true;
                     }
                     else { return false;}
-                  })
+                  })*/
                     .attr("transform", function (d, i){
                       return "translate(0," + (i) * (fieldHeight+1) + ")";
                     })
