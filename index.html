@@ -151,15 +151,6 @@
                       .transition().duration(300);
                   }
 
-              /*    function tableCountyClass(name) {
-                    d3.select(".selected").classed("selected", false);
-                    selectedCounty = name;
-                    d3.selectAll(".Tcounty")
-                      .classed("selected", function(d) {
-                        return d.County == name;
-                      });
-                  }*/
-
                   d3.json("caFields9.json", function(err, ca) {
 
                     var div = d3.select("body").append("div")
@@ -275,8 +266,6 @@
                               .style("top", (d3.event.pageY -30) + "px");})
                               .on("mouseout", function (d) { div.transition().duration(300).style("opacity", 0);})
                               .on("click", function(d) {
-                            //  d3.select(".selected").classed("selected", false);
-                            //  d3.select(this).classed("selected", true).transition().duration(300);
                               selectedCounty = d.properties.name;
                               countyClass(d.properties.name);
                               updatePie1(d.properties.name);
@@ -396,7 +385,6 @@
                   header.append("rect")
                     .attr("width", fieldWidth + 30)
                     .attr("height", fieldHeight)
-                  //  .attr("x", 20)
                     .style("border", "2px red solid");
 
                   header.append("text")
@@ -417,19 +405,11 @@
                   // create rows
                   var rowsEnter = rows.enter().append("svg:g")
                     .attr("class", "Tcounty")
-                  //  .attr("class", "row")
-                /*    .classed("selected", function(d) { if (d.County === selectedCounty) {
-                      return true;
-                    }
-                    else { return false;}
-                  })*/
                     .attr("transform", function (d, i){
                       return "translate(0," + (i) * (fieldHeight+1) + ")";
                     })
                   //  .on("mouseover", function () {rowsEnter.style("fill", "white")})
                     .on("click", function(d) {
-                                      //      d3.select(".selected").classed("selected", false);
-                                      //      d3.select(this).classed("selected", true).transition().duration(300);
                                             selectedCounty = d.County;
                                             countyClass(d.County);
                                             updatePie1(d.County);
@@ -448,6 +428,7 @@
                   // create cells
                   var cellsEnter = cells.enter().append("svg:g")
                     .attr("class", "cell")
+                    .attr("class", "Tcounty")
                     .attr("transform", function (d, i){
                       return "translate(" + i * fieldWidth + ",0)";
                     })
@@ -559,13 +540,13 @@
 
             <div id="countyPies" class="pie">
 
-              <svg id="countyName" class="selectedElement" style="height: 35px; width: 100%;"></svg>
+              <svg id="countyName" class="selectedElement" style="height: 40px; width: 100%;"></svg>
 
-              <svg id="countyTot" class="selectedElement" style="height: 25px; width: 100%;"></svg>
+              <svg id="countyTot" class="selectedElement" style="height: 20px; width: 100%;"></svg>
 
-              <svg id="countyInh" class="selectedElement" style="height: 25px; width: 100%;"></svg>
+              <svg id="countyInh" class="selectedElement" style="height: 20px; width: 100%;"></svg>
 
-              <svg id="countyPie1" class="pieChart" style="height: 232px; width: 100%;"></svg>
+              <svg id="countyPie1" class="pieChart" style="height: 210px; width: 100%;"></svg>
 
               <svg id="countyPie2" class="pieChart" style="height: 260px; width: 100%;"></svg>
 
@@ -589,7 +570,7 @@
                                     .attr("width", width)
                                     .attr("height", height)
                                     .append("g")
-                                    .attr("transform", "translate(" + width / 2.4 + "," + height / 2.5 + ")");
+                                    .attr("transform", "translate(" + width / 2.4 + "," + height / 2.8 + ")");
 
                         var arc = d3.svg.arc()
                                     .innerRadius(radius - 45)
@@ -627,14 +608,14 @@
                         .style("display", "none");
 
                         legend.append("rect")
-                        .attr("y", Math.min(width, height) / 2)
+                        .attr("y", Math.min(width, height) / 2 - 30)
                         .attr("width", 18)
                         .attr("height", 18)
                         .style("fill", color);
 
                         legend.append("text")
                         .attr("x", 24)
-                        .attr("y", Math.min(width, height) / 2 + 9)
+                        .attr("y", Math.min(width, height) / 2 - 21)
                         .attr("dy", ".35em")
                         .attr("fill", "black")
                         .attr("font-size", "10px")
@@ -643,7 +624,7 @@
 
                         var titlePie1 = d3.select("#countyPie1").append("svg")
                                           .attr("x", 220)
-                                          .attr("y", Math.min(width, height) / 2 - 25)
+                                          .attr("y", Math.min(width, height) / 2 - 55)
                                           .style("display", "none");
 
                           titlePie1.append("text")
@@ -698,7 +679,7 @@
                                          .attr("height", height)
                                          .attr("y", "-30")
                                          .append("g")
-                                         .attr("transform", "translate(" + width / 2.4 + "," + height / 2.5 + ")");
+                                         .attr("transform", "translate(" + width / 2.4 + "," + height / 2.3 + ")");
 
                              var arc = d3.svg.arc()
                                          .innerRadius(radius - 45)
@@ -736,14 +717,14 @@
                               .style("display", "none");
 
                               legend.append("rect")
-                              .attr("y", Math.min(width, height) / 2 - 30)
+                              .attr("y", Math.min(width, height) / 2 - 35)
                               .attr("width", 18)
                               .attr("height", 18)
                               .style("fill", color);
 
                               legend.append("text")
                               .attr("x", 24)
-                              .attr("y", Math.min(width, height) / 2 - 21)
+                              .attr("y", Math.min(width, height) / 2 - 26)
                               .attr("dy", ".35em")
                               .attr("fill", "black")
                               .attr("font-size", "10px")
@@ -752,7 +733,7 @@
 
                               var titlePie2 = d3.select("#countyPie2").append("svg")
                                                 .attr("x", 220)
-                                                .attr("y", Math.min(width, height) / 2 - 55)
+                                                .attr("y", Math.min(width, height) / 2 - 60)
                                                 .style("display", "none");
 
                                 titlePie2.append("text")
@@ -765,17 +746,17 @@
 
                               var countyNameSvg = d3.select("#countyName").append("svg")
                                                              .attr("width", 600)
-                                                             .attr("height", 50)
+                                                             .attr("height", 40)
                                                              .style("display", "none");
 
                               var countyTotSvg = d3.select("#countyTot").append("svg")
                                                              .attr("width", 600)
-                                                             .attr("height", 25)
+                                                             .attr("height", 20)
                                                              .style("display", "none");
 
                               var countyInhSvg = d3.select("#countyInh").append("svg")
                                                              .attr("width", 600)
-                                                             .attr("height", 25)
+                                                             .attr("height", 20)
                                                              .style("display", "none");
 
                              d3.select().on("change.2", change);
@@ -800,13 +781,13 @@
                               countyNameRect = countyNameSvg.style("display", null)
                                             .append('rect')
                                             .attr("width", 600)
-                                            .attr("height", 50)
+                                            .attr("height", 40)
                                             .style('fill', "white");
                               countyName = countyNameSvg.style("display", null)
                                             .append("text")
                                             .attr("text-anchor", "left")
                                             .attr("x","0%")
-                                            .attr("y","50%")
+                                            .attr("y","60%")
                                             .text(name+" County:")
                                             .attr("fill", "#444")
                                             .attr("font-weight", "bold")
@@ -827,7 +808,7 @@
                                           .text(tot)
                                           .attr("text-anchor", "left")
                                           .attr("x","0%")
-                                          .attr("y","50%")
+                                          .attr("y","65%")
                                           .attr("fill", "#444")
                                           .attr("font-weight", "bold")
                                           .attr("font-size", "18px");
@@ -835,7 +816,7 @@
                                           countyTot.append("countyTotSvg:tspan")
                                           .text(" CPAD acres")
                                           .attr("text-anchor", "left")
-                                          .attr("y","50%")
+                                          .attr("y","65%")
                                           .attr("fill", "#444")
                                           .attr("font-size", "12px");
                             };
@@ -844,7 +825,7 @@
                               countyInhRect = countyInhSvg.style("display", null)
                                             .append('rect')
                                             .attr("width", 600)
-                                            .attr("height", 25)
+                                            .attr("height", 20)
                                             .style('fill', "white");
 
                                 countyInh = countyInhSvg.style("display", null)
@@ -854,14 +835,14 @@
                                             .text("which amounts to ")
                                             .attr("text-anchor", "left")
                                             .attr("x", "0%")
-                                            .attr("y","50%")
+                                            .attr("y","65%")
                                             .attr("fill", "#444")
                                             .attr("font-size", "12px");
 
                                             countyInh.append("countyInhSvg:tspan")
                                             .text(inh)
                                             .attr("text-anchor", "left")
-                                            .attr("y","50%")
+                                            .attr("y","65%")
                                             .attr("fill", "#444")
                                             .attr("font-weight", "bold")
                                             .attr("font-size", "18px");
@@ -872,7 +853,7 @@
                                                 else { return " CPAD acre per 1,000 inhabitants";}
                                             })
                                             .attr("text-anchor", "left")
-                                            .attr("y","50%")
+                                            .attr("y","65%")
                                             .attr("fill", "#444")
                                             .attr("font-size", "12px");
                                             };
