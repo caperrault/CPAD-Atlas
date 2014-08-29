@@ -32,7 +32,7 @@ h2 {
   padding-top: 10px;
 }
 
-.counties2 {
+.Mcounty {
   stroke:grey;
   stroke-width: 0.5px;
   fill-opacity: 1;
@@ -159,13 +159,13 @@ label {
   clear: both;
 }
 
-.row {
+.Tcounty {
   fill: black;
   border: 5px solid black;
   border-bottom: 2px black;
 }
 
-.row:hover{
+.Tcounty:hover{
   opacity: 0.5;
   cursor: pointer;
   color: red;
@@ -180,7 +180,7 @@ label {
   background: none;
 }
 
-.row.selected {
+.Tcounty.selected {
     fill-opacity: 0.7;
     font-weight: bold;
     font-size: 14px;

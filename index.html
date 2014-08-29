@@ -266,12 +266,6 @@
                     var counties = group.append("path")
                               .attr("d",path)
                               .attr("class", "Mcounty")
-                            /*  .classed("selected", function(d) { if (d.properties.name === selectedCounty) {
-                                return true;
-                              }
-                              else { return false; }
-                            })*/
-                              .attr("class", "counties2")
                               .classed("geo", true)
                               .style("fill", "LightGray")
                               .on("mouseover", function(d) {
@@ -417,13 +411,13 @@
 
                   // fill the table
                   // select rows
-                  var rows = rowsGrp.selectAll("g.row").data(data,
+                  var rows = rowsGrp.selectAll("g.Tcounty").data(data,
                     function(d){ return d.County; });
 
                   // create rows
                   var rowsEnter = rows.enter().append("svg:g")
-                    .attr("class", "row")
                     .attr("class", "Tcounty")
+                  //  .attr("class", "row")
                 /*    .classed("selected", function(d) { if (d.County === selectedCounty) {
                       return true;
                     }
