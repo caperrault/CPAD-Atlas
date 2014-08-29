@@ -136,6 +136,30 @@
 
                   var selectedCounty;
 
+                  function countyClass(name) {
+                    d3.select(".selected").classed("selected", false);
+                    selectedCounty = name;
+                    d3.selectAll(".Mcounty")
+                      .classed("selected", function(d) {
+                        return d.properties.name == name;
+                      })
+                      .transition().duration(300);
+                    d3.selectAll(".Tcounty")
+                      .classed("selected", function(d) {
+                        return d.County == name;
+                      })
+                      .transition().duration(300);
+                  }
+
+              /*    function tableCountyClass(name) {
+                    d3.select(".selected").classed("selected", false);
+                    selectedCounty = name;
+                    d3.selectAll(".Tcounty")
+                      .classed("selected", function(d) {
+                        return d.County == name;
+                      });
+                  }*/
+
                   d3.json("caFields9.json", function(err, ca) {
 
                     var div = d3.select("body").append("div")
@@ -224,17 +248,6 @@
                         .style("fill", "white")
                         .text("+");
 
-              function selectCounty(name) {
-                selectedCounty = name;
-                d3.selectAll(“.county”)
-                  .classed(“selected”, function(d) { if
-                    (d.properties.name == name) {
-                      return true;
-                    }
-                    else {return false;}
-                  });
-              };
-
               d3.selectAll(".radio").on("change", function(){
 
                   if (document.getElementById("ac_tot").checked) {
@@ -252,13 +265,13 @@
 
                     var counties = group.append("path")
                               .attr("d",path)
-                              .attr("class", "county")
+                              .attr("class", "Mcounty")
                             /*  .classed("selected", function(d) { if (d.properties.name === selectedCounty) {
                                 return true;
                               }
                               else { return false; }
                             })*/
-                            //  .attr("class", "counties2")
+                              .attr("class", "counties2")
                               .classed("geo", true)
                               .style("fill", "LightGray")
                               .on("mouseover", function(d) {
@@ -271,11 +284,12 @@
                             //  d3.select(".selected").classed("selected", false);
                             //  d3.select(this).classed("selected", true).transition().duration(300);
                               selectedCounty = d.properties.name;
+                              countyClass(d.properties.name);
                               updatePie1(d.properties.name);
                               updatePie2(d.properties.name);
-                              updateCountyName(d.properties.name+" County:");
-                              updateCountyTot(d3.format(",")(d.properties.ac_tot)+" CPAD acres");
-                              updateCountyInh(d3.format(",")(d.properties.POP_NORM)+" CPAD acres per 1,000 inhabitants");
+                              updateCountyName(d.properties.name);
+                              updateCountyTot(d3.format(",")(d.properties.ac_tot));
+                              updateCountyInh(d3.format(",")(d.properties.POP_NORM));
                           });
 
                   });
@@ -409,7 +423,7 @@
                   // create rows
                   var rowsEnter = rows.enter().append("svg:g")
                     .attr("class", "row")
-                    //.attr("class", "county")
+                    .attr("class", "Tcounty")
                 /*    .classed("selected", function(d) { if (d.County === selectedCounty) {
                       return true;
                     }
@@ -420,14 +434,15 @@
                     })
                   //  .on("mouseover", function () {rowsEnter.style("fill", "white")})
                     .on("click", function(d) {
-                                            d3.select(".selected").classed("selected", false);
-                                            d3.select(this).classed("selected", true).transition().duration(300);
+                                      //      d3.select(".selected").classed("selected", false);
+                                      //      d3.select(this).classed("selected", true).transition().duration(300);
                                             selectedCounty = d.County;
+                                            countyClass(d.County);
                                             updatePie1(d.County);
                                             updatePie2(d.County);
-                                            updateCountyName(d.County+" County:");
-                                            updateCountyTot(d3.format(",")(d["Total CPAD Acreage"])+" CPAD acres");
-                                            updateCountyInh(d3.format(",")(d["CPAD Acres per 1,000 Inh."])+" CPAD acres per 1,000 inhabitants");
+                                            updateCountyName(d.County);
+                                            updateCountyTot(d3.format(",")(d["Total CPAD Acreage"]));
+                                            updateCountyInh(d3.format(",")(d["CPAD Acres per 1,000 Inh."]));
                                           });
 
                   // select cells
@@ -552,9 +567,9 @@
 
               <svg id="countyName" class="selectedElement" style="height: 35px; width: 100%;"></svg>
 
-              <svg id="countyTot" class="selectedElement" style="height: 20px; width: 100%;"></svg>
+              <svg id="countyTot" class="selectedElement" style="height: 25px; width: 100%;"></svg>
 
-              <svg id="countyInh" class="selectedElement" style="height: 20px; width: 100%;"></svg>
+              <svg id="countyInh" class="selectedElement" style="height: 25px; width: 100%;"></svg>
 
               <svg id="countyPie1" class="pieChart" style="height: 232px; width: 100%;"></svg>
 
@@ -761,12 +776,12 @@
 
                               var countyTotSvg = d3.select("#countyTot").append("svg")
                                                              .attr("width", 600)
-                                                             .attr("height", 20)
+                                                             .attr("height", 25)
                                                              .style("display", "none");
 
                               var countyInhSvg = d3.select("#countyInh").append("svg")
                                                              .attr("width", 600)
-                                                             .attr("height", 20)
+                                                             .attr("height", 25)
                                                              .style("display", "none");
 
                              d3.select().on("change.2", change);
@@ -798,45 +813,75 @@
                                             .attr("text-anchor", "left")
                                             .attr("x","0%")
                                             .attr("y","50%")
-                                            .text(function() { return name})
+                                            .text(name+" County:")
                                             .attr("fill", "#444")
                                             .attr("font-weight", "bold")
-                                            .attr("font-size", "2em");
+                                            .attr("font-size", "32px");
                             };
 
                             function setTotValue(tot) {
                               countyTotRect = countyTotSvg.style("display", null)
                                             .append('rect')
                                             .attr("width", 600)
-                                            .attr("height", 20)
+                                            .attr("height", 25)
                                             .style('fill', "white");
+
                               countyTot = countyTotSvg.style("display", null)
-                                            .append("text")
-                                            .attr("text-anchor", "left")
-                                            .attr("x","0%")
-                                            .attr("y","50%")
-                                            .text(function() { return tot})
-                                            .attr("fill", "#444")
-                                            .attr("font-weight", "bold")
-                                            .attr("font-size", "1em");
+                                            .append("countyTotSvg:text")
+
+                                          countyTot.append("countyTotSvg:tspan")
+                                          .text(tot)
+                                          .attr("text-anchor", "left")
+                                          .attr("x","0%")
+                                          .attr("y","50%")
+                                          .attr("fill", "#444")
+                                          .attr("font-weight", "bold")
+                                          .attr("font-size", "18px");
+
+                                          countyTot.append("countyTotSvg:tspan")
+                                          .text(" CPAD acres")
+                                          .attr("text-anchor", "left")
+                                          .attr("y","50%")
+                                          .attr("fill", "#444")
+                                          .attr("font-size", "12px");
                             };
 
                             function setInhValue(inh) {
                               countyInhRect = countyInhSvg.style("display", null)
                                             .append('rect')
                                             .attr("width", 600)
-                                            .attr("height", 20)
+                                            .attr("height", 25)
                                             .style('fill', "white");
-                              countyInh = countyInhSvg.style("display", null)
-                                            .append("text")
+
+                                countyInh = countyInhSvg.style("display", null)
+                                              .append("countyInhSvg:text")
+
+                                            countyInh.append("countyInhSvg:tspan")
+                                            .text("which amounts to ")
                                             .attr("text-anchor", "left")
-                                            .attr("x","0%")
+                                            .attr("x", "0%")
                                             .attr("y","50%")
-                                            .text(function() { return inh})
+                                            .attr("fill", "#444")
+                                            .attr("font-size", "12px");
+
+                                            countyInh.append("countyInhSvg:tspan")
+                                            .text(inh)
+                                            .attr("text-anchor", "left")
+                                            .attr("y","50%")
                                             .attr("fill", "#444")
                                             .attr("font-weight", "bold")
-                                            .attr("font-size", "1em");
-                            };
+                                            .attr("font-size", "18px");
+
+                                            countyInh.append("countyInhSvg:tspan")
+                                            .text(function() {
+                                              if(inh >= 2) { return " CPAD acres per 1,000 inhabitants";}
+                                                else { return " CPAD acre per 1,000 inhabitants";}
+                                            })
+                                            .attr("text-anchor", "left")
+                                            .attr("y","50%")
+                                            .attr("fill", "#444")
+                                            .attr("font-size", "12px");
+                                            };
 
                             updatePie2 = setValue;
                             updateCountyName = setCountyValue;
