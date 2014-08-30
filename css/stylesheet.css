@@ -150,9 +150,8 @@ label {
   padding: 10px;
 }
 
-.tableHeader.selected text {
-  color: red;
-  font-size: 14px;
+g .tableHeaderSelected {
+  fill: lightGray;
 }
 
 #countyHeaders {
