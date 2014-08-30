@@ -99,14 +99,16 @@
 
 		      <h2 style="padding-top:0;">CPAD Atlas</h2>
 
-          <div class="content"><p>CPAD contains data about California lands protected for open space purposes and owned in fee by agencies and organizations. More than <strong>49,000,000 acres</strong> of protected land are now inventoried in CPAD. The land is owned by more than <strong>900 government agencies, non-profit and other organizations</strong>, for the CPAD 2014a (February 2014) release.</p>
+          <div class="content">
+            <p>CPAD contains data about California lands protected for open space purposes and owned in fee by agencies and organizations. More than <strong>49,000,000 acres</strong> of protected land are now inventoried in CPAD. The land is owned by more than <strong>900 government agencies, non-profit and other organizations</strong>, for the CPAD 2014a (February 2014) release.</p>
           </div>
 
           <h3>CPAD Data per County</h3>
 
           <div id="countyChapter">
 
-            <div class="content"><p>California counties are inequally wealthy in protected areas. The map below shows the distribution of protected areas throughout the 58 counties, either in terms of <strong>total acreage</strong> or <strong>acreage per inhabitant</strong>. <strong>Click on any county on the map or in the table</strong> to take a deeper look into its protected areas.</p>
+            <div class="content">
+              <p>California counties are inequally wealthy in protected areas. The map below shows the distribution of protected areas throughout the 58 counties, either in terms of <strong>total acreage</strong> or <strong>acreage per inhabitant</strong>. <strong>Click on any county on the map or in the table</strong> to take a deeper look into its protected areas.</p>
             </div>
 
             <form id="nav" class="switch switch-blue">
@@ -140,14 +142,10 @@
                     d3.select(".selected").classed("selected", false);
                     selectedCounty = name;
                     d3.selectAll(".Mcounty")
-                      .classed("selected", function(d) {
-                        return d.properties.name == name;
-                      })
+                      .classed("selected", function(d) {return d.properties.name == name;})
                       .transition().duration(300);
                     d3.selectAll(".Tcounty")
-                      .classed("selected", function(d) {
-                        return d.County == name;
-                      })
+                      .classed("selected", function(d) {return d.County == name;})
                       .transition().duration(300);
                   }
 
@@ -288,25 +286,22 @@
 
             <div id="div1" class="tab">
 
-              <svg id="countyHeaders" />
+            <svg id="countyHeaders" />
 
-                <div id="countyTable" class="table">
+              <div id="countyTable" class="table">
 
               <svg id="countyIndex" class="cell">
 
                 <script>
 
                   var index = [];
-                  for (var i = 1; i < 59; i++) {
-                      index.push(i);
-                  }
+                  for (var i = 1; i < 59; i++) {index.push(i);}
 
                   var indexRect = d3.select("#countyIndex").selectAll("rect")
                                    .data(index)
                                    .enter()
                                    .append("rect")
-                                   .attr("y", function(d, i) {
-                          			   		return i * 21;})
+                                   .attr("y", function(d, i) {return i * 21;})
                           			   .attr("x", 0)
                           			   .attr("width", 20)
                           			   .attr("height", 21)
@@ -317,16 +312,12 @@
                                .data(index)
                                .enter()
                                .append("text")
-
-                               .attr("y", function(d, i) {
-                                   return (i*21) + 14;})
+                               .attr("y", function(d, i) {return (i*21) + 14;})
                                .attr("x", 10)
                                .attr("width", 20)
                                .attr("height", 21)
                                .attr("font-weight", "bold")
-                               .text(function (d, i) {
-                                 return d;
-                               });
+                               .text(function (d, i) {return d;});
 
                 </script>
 
@@ -356,6 +347,7 @@
                 var headerGrp = canvasH.append("g")
                                 .attr("class", "headerGrp")
                                 .attr("x", 20);
+
                 var rowsGrp = canvasR.append("g")
                               .attr("class","rowsGrp");
 
@@ -384,18 +376,16 @@
 
                   header.append("rect")
                     .attr("width", fieldWidth + 30)
-                    .attr("height", fieldHeight)
-                    .style("border", "2px red solid");
+                    .attr("height", fieldHeight);
 
                   header.append("text")
                     .attr("x", fieldWidth/2 + 25)
                     .attr("y", fieldHeight/2)
                     .attr("dy", ".35em")
-                  //  .style("color", "red")
                     .text(function (d) { return d;})
-                  /*  .on("click", function (d, i) {
-                      d3.select(this).style("color", "red");
-                    });*/
+                    .on("click", function (d) {
+                      d3.select(this).classed("selected", true);
+                    });
 
                   // fill the table
                   // select rows
@@ -408,7 +398,6 @@
                     .attr("transform", function (d, i){
                       return "translate(0," + (i) * (fieldHeight+1) + ")";
                     })
-                  //  .on("mouseover", function () {rowsEnter.style("fill", "white")})
                     .on("click", function(d) {
                                             selectedCounty = d.County;
                                             countyClass(d.County);
@@ -420,10 +409,7 @@
                                           });
 
                   // select cells
-                  var cells = rows.selectAll("g.cell").data(function(d){
-                      return d3.values(d);
-                    })
-                    .style("border", "2px black solid");
+                  var cells = rows.selectAll("g.cell").data(function(d){return d3.values(d);});
 
                   // create cells
                   var cellsEnter = cells.enter().append("svg:g")
@@ -431,8 +417,7 @@
                     .attr("class", "Tcounty")
                     .attr("transform", function (d, i){
                       return "translate(" + i * fieldWidth + ",0)";
-                    })
-                    .style("border", "2px black solid");
+                    });
 
                   cellsEnter.append("rect")
                     .attr("width", fieldWidth)
@@ -445,8 +430,7 @@
                     .text( function (d) { if (typeof d == "number") {
                       return d3.format(',')(d);}
                       else {return d;}
-                      })
-                    .style("border", "2px black solid");
+                      });
 
                   //update if not in initialisation
                   if(sortOn !== null) {
@@ -484,16 +468,14 @@
           </div>
 
           <script type="text/javascript" >
+
           (function(){
       var tabs = document.getElementById("tabs");
       var nav = $("input:radio[name=viewTab]").click(function() {
                 var value = $(this).val();
                 });
-      //var nav = tabs.getElementsByTagName("input");
 
-      /*
-      * Hide all tabs
-      */
+      //Hide all tabs
       function hideTab1(){
         var tab1 = document.getElementById("div1");
             tab1.className = tab1.className + " hide";
@@ -504,8 +486,9 @@
             tab2.className = tab2.className + " hide";
       }
 
+      //hide tabs on load
       hideTab1();
-      hideTab2(); /* hide tabs on load */
+      hideTab2();
 
       function hideTabs(){
         var tab = tabs.getElementsByTagName("div");
@@ -516,16 +499,12 @@
         }
       }
 
-      /*
-      * Show the clicked tab
-      */
+      //Show the clicked tab
       function showTab(tab){
         document.getElementById(tab).className = "tab";
       }
 
-      /*
-      * Add click events
-      */
+      //Add click events
       for(var i=0;i<nav.length;i++){
         nav[i].onclick = function(){
           hideTabs();
@@ -562,6 +541,11 @@
                         .attr("class", "pieTooltip")
                         .style("opacity", 0);
 
+                        var enterClockwise = {
+                            startAngle: 0,
+                            endAngle: 0
+                          };
+
                         var color = d3.scale.ordinal()
                                             .range(["#FFC8B7", "#EF8B6C", "#F05522", "#E0E0E0"])
                                             .domain(d3.range(0,4));
@@ -577,7 +561,7 @@
                                     .outerRadius(radius - 20);
 
                         var pie = d3.layout.pie()
-                                    .value(function(d) { return d.Alameda; })
+                                  //  .value(function(d) { return d.Alameda; })
                                     .sort(null);
 
                         var path = svg.datum(dataset).selectAll("path")
@@ -585,8 +569,15 @@
                                       .enter().append("path")
                                       .attr("fill", function(d, i) { return color(i); })
                                       .classed("chart", true)
-                                      .attr("d", arc)
-                                      .each(function(d) { this._current = d; })
+                                      .attr("d", arc(enterClockwise))
+                                      .each(function(d) {
+                                            this._current = {
+                                              data: d.data,
+                                              value: d.value,
+                                              startAngle: enterClockwise.startAngle,
+                                              endAngle: enterClockwise.endAngle
+                                            }
+                                          })
                                       .attr("data-legend",function(d) { return d.Access_type})
                                       .style("display", "none")
                                       .on("mouseover", function(d, i) {
@@ -672,6 +663,11 @@
                              .attr("class", "pieTooltip")
                              .style("opacity", 0);
 
+                             var enterClockwise = {
+                                 startAngle: 0,
+                                 endAngle: 0
+                               };
+
                              var color = d3.scale.category20();
 
                              var svg = d3.select("#countyPie2").append("svg")
@@ -694,8 +690,15 @@
                                            .enter().append("path")
                                            .attr("fill", function(d, i) { return color(i); })
                                            .classed("chart", true)
-                                           .attr("d", arc)
-                                           .each(function(d) { this._current = d; })
+                                           .attr("d", arc(enterClockwise))
+                                           .each(function(d) {
+                                                 this._current = {
+                                                   data: d.data,
+                                                   value: d.value,
+                                                   startAngle: enterClockwise.startAngle,
+                                                   endAngle: enterClockwise.endAngle
+                                                 }
+                                               })
                                            .attr("data-legend",function(d) { return d.Agency_lev})
                                            .style("display", "none")
                                            .on("mouseover", function(d, i) {
@@ -778,11 +781,13 @@
                             };
 
                             function setCountyValue(name) {
+
                               countyNameRect = countyNameSvg.style("display", null)
                                             .append('rect')
                                             .attr("width", 600)
                                             .attr("height", 40)
                                             .style('fill', "white");
+
                               countyName = countyNameSvg.style("display", null)
                                             .append("text")
                                             .attr("text-anchor", "left")
@@ -795,6 +800,7 @@
                             };
 
                             function setTotValue(tot) {
+
                               countyTotRect = countyTotSvg.style("display", null)
                                             .append('rect')
                                             .attr("width", 600)
@@ -822,6 +828,7 @@
                             };
 
                             function setInhValue(inh) {
+
                               countyInhRect = countyInhSvg.style("display", null)
                                             .append('rect')
                                             .attr("width", 600)
