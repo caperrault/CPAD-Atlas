@@ -1,55 +1,63 @@
-var selectedCounty;
+/*var selectedCity;
 
-function countyClass(name) {
+function cityClass(name) {
   d3.select(".selected").classed("selected", false);
-  selectedCounty = name;
+  selectedCity = name;
   d3.selectAll(".Mcounty")
     .classed("selected", function(d) {return d.properties.name == name;})
     .transition().duration(300);
   d3.selectAll(".Tcounty")
     .classed("selected", function(d) {return d.County == name;})
     .transition().duration(300);
-}
+}*/
 
-d3.json("caFields9.json", function(err, ca) {
+d3.json("CPAD_percity.json", function(err, ca) {
 
-  var div = d3.select("body").append("div")
+  /*var div = d3.select("body").append("div")
   .attr("class", "mapTooltip")
   .style("opacity", 0);
 
   var radio = d3.select(".ca")
               .append("input")
-              .attr("type","Radio")
+              .attr("type","Radio")*/
 
-  var colorTOT = d3.scale.linear()
-    .domain([30237, 993455, 12867928])
-    .range(['rgb(255,245,96)','rgb(215,211,0)','rgb(35,132,67)'])
-    .interpolate(d3.interpolateRgb);
+//  var width = 1000;
+//  var height = 1000;
 
-  var colorPOP = d3.scale.linear()
-    .domain([0.01, 2.08, 368])
-    .range(['rgb(255,245,96)','rgb(205,211,0)','rgb(35,132,67)'])
-    .interpolate(d3.interpolateRgb);
+  var radius = d3.scale.sqrt()
+    .domain([0, 50000000])
+    .range([0, 15]);
 
-  var projection = d3.geo.albers()
-      .translate([70, 210])
-      .scale(2700)
-      .rotate([122.4183, 0])
-      .center([0, 37.7750]);
+var projection = d3.geo.albers()
+    .translate([70, 210])
+    .scale(2700)
+    .rotate([122.4183, 0])
+    .center([0, 37.7750]);
 
-  var svg = d3.select("#countyMapSvg");
+  var cityPoints = d3.geo.path().projection(projection);
 
-  var group = svg.selectAll('g')
-          .data(topojson.feature(ca, ca.objects.counties2).features)
-          .enter()
-          .append('g')
+  var svg = d3.select("#cityMapSvg");
 
-  var path = d3.geo.path().projection(projection);
+    svg.append("path")
+      .datum(topojson.feature(ca, ca.objects.ca_shape))
+      .attr("d", d3.geo.path().projection(projection))
+      .style("fill", "lightGray")
+      .style("stroke-width", 0);
 
-  var LegendW = 80;
+    svg.append("g")
+      .attr("class", "bubble").selectAll("circle")
+      .attr("d", d3.geo.path().projection(projection))
+      .data(topojson.feature(ca, ca.objects.CPAD_cities).features)
+      .sort(function(a, b) { return b.properties.ac_tot - a.properties.ac_tot; })
+      .enter()
+      .append("circle")
+      .attr("transform", function(d) { return "translate(" + cityPoints.centroid(d) + ")"; })
+      .attr("r", function (d) { return radius(d.properties.ac_tot)*50});
+
+  /*var LegendW = 80;
       LegendH = 20;
 
-  var svg = d3.select("#countyMapSvg").append("svg:svg")
+  var svg = d3.select("#cityMapSvg").append("svg:svg")
       .attr("class", "mapLegend")
       .attr("width", LegendW)
       .attr("height", LegendH)
@@ -97,9 +105,9 @@ d3.json("caFields9.json", function(err, ca) {
       .attr("dy",0)
       .style("font-size", "14px")
       .style("fill", "white")
-      .text("+");
+      .text("+");*/
 
-d3.selectAll(".radio").on("change", function(){
+/*d3.selectAll(".radio").on("change", function(){
 
 if (document.getElementById("ac_tot").checked) {
         counties.transition().duration(250)
@@ -112,9 +120,9 @@ else if (document.getElementById("POP_NORM").checked) {
              .style("fill", function (d) {return colorPOP(d.properties.POP_NORM);});
         svg.transition().duration(300).style("display", null);
              }
-           });
+           });*/
 
-  var counties = group.append("path")
+  /*var counties = group.append("path")
             .attr("d",path)
             .attr("class", "Mcounty")
             .classed("geo", true)
@@ -133,6 +141,6 @@ else if (document.getElementById("POP_NORM").checked) {
             updateCountyName(d.properties.name);
             updateCountyTot(d3.format(",")(d.properties.ac_tot));
             updateCountyInh(d3.format(",")(d.properties.POP_NORM));
-        });
+        });*/
 
 });

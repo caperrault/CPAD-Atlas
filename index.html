@@ -36,6 +36,7 @@
     <script src="js/countyPie1.js"></script>
     <script src="js/countyPie2.js"></script>
     <script src="js/countyInfo.js"></script>
+    <script src="js/cityMap.js"></script>
 
   </head>
 
@@ -316,7 +317,6 @@
 
             });
 
-
                 var updatePie1;
                 var updatePie2;
                 var updateCountyName;
@@ -396,6 +396,299 @@
             </div>
 
           </div>
+
+      <h3>CPAD Data per City</h3>
+
+      <div id="cityChapter">
+
+        <div class="content">
+          <p>California cities are inequally wealthy in protected areas. The map below shows the quantity of protected areas in the 50 California cities featuring the largest CPAD area acreage, either in terms of <strong>total acreage</strong> or <strong>acreage per inhabitant</strong>. <strong>Click on any city on the map or in the table</strong> to take a deeper look into its protected areas.</p>
+        </div>
+
+<!--
+
+        <form id="cityNav" class="switch switch-blue">
+            <input type="radio" class="div2" name="viewTab" id="week2" checked>
+            <label for="week2" class="switch-label switch-label-off">Map View</label>
+            <input type="radio" class="div1" name="viewTab" id="month2">
+            <label for="month2" class="switch-label switch-label-on">Table View</label>
+          <span class="switch-selection"></span>
+        </form>
+
+        <div id="cityTabs">
+
+        <div id="div2" class="tab"> -->
+
+          <div id="cityMap" class="map">
+
+        <!--  <div>
+            <form class="mapScale">
+              <label><input type="Radio" name="dataset" id="ac_tot" class="radio" value="ac_tot"> Total CPAD Acreage</label>
+              <label><input type="Radio" name="dataset" id="POP_NORM" class="radio" value="POP_NORM"> CPAD Acres per Inhabitant</label>
+            </form>
+          </div>-->
+
+            <svg id="cityMapSvg" class="ca"></svg>
+
+          </div>
+
+          <!--
+
+        </div>
+
+        <div id="div1" class="tab">
+
+        <svg id="cityHeaders"></svg>
+
+          <div id="cityTable" class="table">
+
+          <svg id="cityIndex" class="cell"></svg>
+
+          <svg id="cityRow"></svg>
+
+            <script>
+
+            var selectedCityTableHeader;
+
+            var index = [];
+            for (var i = 1; i < 59; i++) {index.push(i);}
+
+            var indexRect = d3.select("#cityIndex").selectAll("rect")
+                             .data(index)
+                             .enter()
+                             .append("rect")
+                             .attr("y", function(d, i) {return i * 21;})
+                             .attr("x", 0)
+                             .attr("width", 20)
+                             .attr("height", 21)
+                             .attr("fill", "white")
+                             .classed("tableHeader", "true");
+
+            var indexNumber = d3.select("#cityIndex").selectAll("text")
+                         .data(index)
+                         .enter()
+                         .append("text")
+                         .attr("y", function(d, i) {return (i*21) + 14;})
+                         .attr("x", 10)
+                         .attr("width", 20)
+                         .attr("height", 21)
+                         .attr("font-weight", "bold")
+                         .text(function (d, i) {return d;});
+
+            var width = 500,
+                height = 1000;
+
+            var fieldHeight = 20;
+            var fieldWidth = 145;
+
+            var canvasH = d3.select("#cityHeaders")
+                .attr("width", width)
+                .attr("height", fieldHeight)
+                .attr("x", 20)
+                .append("g");
+
+            var canvasR = d3.select("#cityRow")
+                .attr("width", width)
+                .attr("height", height)
+                .append("g");
+
+            var headerGrp = canvasH.append("g")
+                            .attr("class", "headerGrp")
+                            .attr("x", 20);
+
+            var rowsGrp = canvasR.append("g")
+                          .attr("class","rowsGrp");
+
+            var previousSort = null;
+
+            d3.json("Counties_stats_3col.json", function(data) {
+
+            refreshTable(null);
+
+            function refreshTable(sortOn){
+
+              // create the table header
+              var header = headerGrp.selectAll("g")
+                .data(d3.keys(data[0]))
+                .enter()
+                .append("g")
+                .attr("class", "tableHeader")
+                .attr("transform", function (d, i){
+                  return "translate("+ i* fieldWidth + ",0)";
+                });
+
+              header.append("rect")
+                .attr("width", fieldWidth + 30)
+                .attr("height", fieldHeight);
+
+              header.append("text")
+                .attr("x", fieldWidth/2 + 25)
+                .attr("y", fieldHeight/2)
+                .attr("dy", ".35em")
+                .text(function (d) { return d;})
+                .style("cursor", function (d, i) {
+                    if (i>=0) { return "s-resize";}
+                    else { return "default";}
+                  })
+                .on("click", function (d, i) {
+                  selectedCountyTableHeader = i;
+                  if (i>=0) {
+                  d3.select(".tableHeaderSelected").classed("tableHeaderSelected", false);
+                  d3.select(this).classed("tableHeaderSelected", true);
+                  return refreshTable(d);
+                  }
+                });
+
+              // fill the table
+              // select rows
+              var rows = rowsGrp.selectAll("g.Tcounty").data(data,
+                function(d){ return d.County; });
+
+              // create rows
+              var rowsEnter = rows.enter().append("svg:g")
+                .attr("class", "Tcounty")
+                .attr("transform", function (d, i){
+                  return "translate(0," + (i) * (fieldHeight+1) + ")";
+                })
+                .on("click", function(d) {
+                                        selectedCounty = d.County;
+                                        countyClass(d.County);
+                                        updatePie1(d.County);
+                                        updatePie2(d.County);
+                                        updateCountyName(d.County);
+                                        updateCountyTot(d3.format(",")(d["Total CPAD Acreage"]));
+                                        updateCountyInh(d3.format(",")(d["CPAD Acres per 1,000 Inh."]));
+                                      });
+
+              // select cells
+              var cells = rows.selectAll("g.cell").data(function(d){return d3.values(d);});
+
+              // create cells
+              var cellsEnter = cells.enter().append("svg:g")
+                .attr("class", "cell")
+                .attr("class", "Tcounty")
+                .attr("transform", function (d, i){
+                  return "translate(" + i * fieldWidth + ",0)";
+                });
+
+              cellsEnter.append("rect")
+                .attr("width", fieldWidth)
+                .attr("height", fieldHeight);
+
+              cellsEnter.append("text")
+                .attr("x", fieldWidth / 2)
+                .attr("y", fieldHeight / 2)
+                .attr("dy", ".35em")
+                .text( function (d) { if (typeof d == "number") {
+                  return d3.format(',')(d);}
+                  else {return d;}
+                  });
+
+              //update if not in initialisation
+              // update rows
+
+              if(sortOn !== null) {
+                        // update rows
+                        rows.sort(
+                         function(a,b){
+                           if (selectedCountyTableHeader>0) {return sort(b[sortOn], a[sortOn]);}
+                           else {return sort(a[sortOn], b[sortOn]);}
+                        });
+                        previousSort = null;
+
+                        rows.transition()
+                          .duration(500)
+                          .attr("transform", function (d, i){
+                            return "translate(0," + (i) * (fieldHeight+1) + ")";
+                          });
+                    }
+                  }
+
+            function sort(a,b){
+                return a > b ? 1 : a == b ? 0 : -1;
+            }
+
+        });
+
+            var updatePie1;
+            var updatePie2;
+            var updateCountyName;
+            var updateCountyTot;
+            var updateCountyInh;
+
+            </script>
+
+          </svg>
+
+          <script type="text/javascript">
+
+          (function(){
+          var tabs = document.getElementById("tabs");
+          var nav = $("input:radio[name=viewTab]").click(function() {
+                var value = $(this).val();
+                });
+
+          //Hide all tabs
+          function hideTab1(){
+          var tab1 = document.getElementById("div1");
+            tab1.className = tab1.className + " hide";
+          }
+
+          function hideTab2(){
+          var tab2 = document.getElementById("div2");
+            tab2.className = tab2.className + " hide";
+          }
+
+          //hide tabs on load
+          hideTab1();
+          hideTab2();
+
+          function hideTabs(){
+          var tab = tabs.getElementsByTagName("div");
+          for(var i=0;i<=nav.length+1;i++){
+          if(tab[i].className == "tab"){
+            tab[i].className = tab[i].className + " hide";
+          }
+          }
+          }
+
+          //Show the clicked tab
+          function showTab(tab){
+          document.getElementById(tab).className = "tab";
+          }
+
+          //Add click events
+          for(var i=0;i<nav.length;i++){
+          nav[i].onclick = function(){
+          hideTabs();
+          showTab(this.className);
+          }
+          }
+
+          showTab("div2");
+          }) ();
+
+          </script>
+        </div>
+
+        </div>
+      </div>
+
+        <div id="cityPies" class="pie">
+
+          <svg id="cityName" class="selectedElement" style="height: 40px; width: 100%;"></svg>
+
+          <svg id="cityTot" class="selectedElement" style="height: 20px; width: 100%;"></svg>
+
+          <svg id="cityInh" class="selectedElement" style="height: 20px; width: 100%;"></svg>
+
+          <svg id="cityPie1" class="pieChart" style="height: 210px; width: 100%;"></svg>
+
+          <svg id="cityPie2" class="pieChart" style="height: 260px; width: 100%;"></svg>
+
+        </div>-->
+
+      </div>
 
     </div>
   </body>
