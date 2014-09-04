@@ -99,15 +99,15 @@ d3.json("caFields9.json", function(err, ca) {
       .style("fill", "white")
       .text("+");
 
-d3.selectAll(".radio").on("change", function(){
+d3.selectAll(".radioCounty").on("change", function(){
 
-if (document.getElementById("ac_tot").checked) {
+if (document.getElementById("ac_totCounty").checked) {
         counties.transition().duration(250)
              .style("fill", function (d) {return colorTOT(d.properties.ac_tot);});
         svg.transition().duration(300).style("display", null);
              }
 
-else if (document.getElementById("POP_NORM").checked) {
+else if (document.getElementById("POP_NORMCounty").checked) {
         counties.transition().duration(250)
              .style("fill", function (d) {return colorPOP(d.properties.POP_NORM);});
         svg.transition().duration(300).style("display", null);

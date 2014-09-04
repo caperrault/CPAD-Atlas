@@ -77,6 +77,11 @@ path.geo:hover {
   cursor: pointer;
 }
 
+circle.geo:hover {
+  fill-opacity: 0.9;
+  cursor: pointer;
+}
+
 path.chart:hover {
   fill-opacity: 0.8;
   cursor: pointer;
@@ -114,6 +119,17 @@ fill:white;
 stroke: #444;
 stroke-width: 0.5px;
 opacity:0.8;}
+
+.legend circle {
+  fill: none;
+  stroke: #ccc;
+}
+
+.legend text {
+  fill: #777;
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
 
 .ca {
   width: 500px;
@@ -301,4 +317,9 @@ input[name="dataset"] {
     -moz-appearance: checkbox;
     -ms-appearance: checkbox;
     -o-appearance: checkbox;
+}
+
+.bubble {
+  fill-opacity: .5;
+  stroke-width: .5px;
 }

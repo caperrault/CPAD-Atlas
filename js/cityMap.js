@@ -1,6 +1,6 @@
-/*var selectedCity;
+var selectedCity;
 
-function cityClass(name) {
+/*function cityClass(name) {
   d3.select(".selected").classed("selected", false);
   selectedCity = name;
   d3.selectAll(".Mcounty")
@@ -13,26 +13,26 @@ function cityClass(name) {
 
 d3.json("CPAD_percity.json", function(err, ca) {
 
-  /*var div = d3.select("body").append("div")
+  var height = 500;
+  var width = 500;
+
+  var div = d3.select("body").append("div")
   .attr("class", "mapTooltip")
   .style("opacity", 0);
 
   var radio = d3.select(".ca")
               .append("input")
-              .attr("type","Radio")*/
-
-//  var width = 1000;
-//  var height = 1000;
+              .attr("type","Radio")
 
   var radius = d3.scale.sqrt()
     .domain([0, 50000000])
     .range([0, 15]);
 
-var projection = d3.geo.albers()
-    .translate([70, 210])
-    .scale(2700)
-    .rotate([122.4183, 0])
-    .center([0, 37.7750]);
+  var projection = d3.geo.albers()
+      .translate([70, 210])
+      .scale(2700)
+      .rotate([122.4183, 0])
+      .center([0, 37.7750]);
 
   var cityPoints = d3.geo.path().projection(projection);
 
@@ -41,106 +41,69 @@ var projection = d3.geo.albers()
     svg.append("path")
       .datum(topojson.feature(ca, ca.objects.ca_shape))
       .attr("d", d3.geo.path().projection(projection))
-      .style("fill", "lightGray")
-      .style("stroke-width", 0);
+      .style("fill", "LightGray")
+      .style("stroke", "grey")
+      .style("stroke-width", 0.5);
 
-    svg.append("g")
-      .attr("class", "bubble").selectAll("circle")
+  var cities = svg.append("g")
+      .attr("class", "bubble")
+      .selectAll("circle")
       .attr("d", d3.geo.path().projection(projection))
       .data(topojson.feature(ca, ca.objects.CPAD_cities).features)
       .sort(function(a, b) { return b.properties.ac_tot - a.properties.ac_tot; })
       .enter()
       .append("circle")
+      .attr("class", "geo")
       .attr("transform", function(d) { return "translate(" + cityPoints.centroid(d) + ")"; })
-      .attr("r", function (d) { return radius(d.properties.ac_tot)*50});
-
-  /*var LegendW = 80;
-      LegendH = 20;
-
-  var svg = d3.select("#cityMapSvg").append("svg:svg")
-      .attr("class", "mapLegend")
-      .attr("width", LegendW)
-      .attr("height", LegendH)
-      .attr("x", 0)
-      .attr("y", 420)
-      .style("display", "none");
-
-  var gradient = svg.append("svg:defs")
-    .append("svg:linearGradient")
-      .attr("id", "gradient")
-      .attr("x1", "100%")
-      .attr("y1", "0%")
-      .attr("x2", "0%")
-      .attr("y2", "0%")
-      .attr("spreadMethod", "pad");
-
-  gradient.append("svg:stop")
-      .attr("offset", "0%")
-      .attr("stop-color", "rgb(35,132,67)")
-      .attr("stop-opacity", 1);
-
-  gradient.append("svg:stop")
-      .attr("offset", "100%")
-      .attr("stop-color", "rgb(255,245,96)")
-      .attr("stop-opacity", 1);
-
-  svg.append("svg:rect")
-      .attr("width", LegendW)
-      .attr("height", LegendH)
-      .style("fill", "url(#gradient)");
-
-  svg.append("text")
-      .attr("text-anchor", "middle")
-      .attr("x","15%")
-      .attr("y","69%")
-      .attr("dy",0)
-      .style("font-size", "16px")
+      .attr("r", 4)
       .style("fill", "black")
-      .text("-");
+      .style("opacity", 0.6)
+      .on("mouseover", function(d) {
+      div.transition().duration(300).style("opacity", 1);
+      div.text(d.properties.Name)
+      .style("left", (d3.event.pageX) + "px")
+      .style("top", (d3.event.pageY -30) + "px");})
+      .on("mouseout", function (d) { div.transition().duration(300).style("opacity", 0);});
 
-  svg.append("text")
-      .attr("text-anchor", "middle")
-      .attr("x","85%")
-      .attr("y","65%")
-      .attr("dy",0)
-      .style("font-size", "14px")
-      .style("fill", "white")
-      .text("+");*/
+      var legend = d3.select("#cityMapSvg")
+          .append("g")
+          .attr("class", "mapLegend")
+          .attr("class", "legend")
+          .attr("transform", "translate(" + 30 + "," + (height - 80) + ")")
+          .selectAll("g")
+          .data([30e6, 100e6])
+          .enter()
+          .append("g")
+          .style("display", "none");
 
-/*d3.selectAll(".radio").on("change", function(){
+      legend.append("circle")
+          .attr("cy", function(d) { return - radius(d); })
+          .attr("r", radius);
 
-if (document.getElementById("ac_tot").checked) {
-        counties.transition().duration(250)
-             .style("fill", function (d) {return colorTOT(d.properties.ac_tot);});
-        svg.transition().duration(300).style("display", null);
+      legend.append("text")
+          .attr("y", function(d) { return - 2 * radius(d); })
+          .attr("dy", "1.3em")
+          .text(d3.format(".1s"));
+
+d3.selectAll(".radioCity").on("change", function(){
+
+if (document.getElementById("ac_totCity").checked) {
+        cities.transition().duration(250)
+             .style("fill", "#239743")
+             .style("stroke", "#239743")
+             .style("opacity", 0.8)
+             .attr("r", function (d) { return radius(d.properties.ac_tot)*50})
+        legend.transition().duration(300).style("display", null);
              }
 
-else if (document.getElementById("POP_NORM").checked) {
-        counties.transition().duration(250)
-             .style("fill", function (d) {return colorPOP(d.properties.POP_NORM);});
-        svg.transition().duration(300).style("display", null);
+else if (document.getElementById("POP_NORMCity").checked) {
+        cities.transition().duration(250)
+             .style("fill", "#239743")
+             .style("stroke", "#239743")
+             .style("opacity", 0.8)
+             .attr("r", function (d) { return radius(d.properties.POP_NORM)*200})
+        legend.transition().duration(300).style("display", null);
              }
-           });*/
-
-  /*var counties = group.append("path")
-            .attr("d",path)
-            .attr("class", "Mcounty")
-            .classed("geo", true)
-            .style("fill", "LightGray")
-            .on("mouseover", function(d) {
-            div.transition().duration(300).style("opacity", 1);
-            div.text(d.properties.name+" County")
-            .style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY -30) + "px");})
-            .on("mouseout", function (d) { div.transition().duration(300).style("opacity", 0);})
-            .on("click", function(d) {
-            selectedCounty = d.properties.name;
-            countyClass(d.properties.name);
-            updatePie1(d.properties.name);
-            updatePie2(d.properties.name);
-            updateCountyName(d.properties.name);
-            updateCountyTot(d3.format(",")(d.properties.ac_tot));
-            updateCountyInh(d3.format(",")(d.properties.POP_NORM));
-        });*/
+           });
 
 });

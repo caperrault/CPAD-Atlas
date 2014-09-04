@@ -132,8 +132,8 @@
 
               <div>
                 <form class="mapScale">
-                  <label><input type="Radio" name="dataset" id="ac_tot" class="radio" value="ac_tot"> Total CPAD Acreage</label>
-                  <label><input type="Radio" name="dataset" id="POP_NORM" class="radio" value="POP_NORM"> CPAD Acres per Inhabitant</label>
+                  <label><input type="Radio" name="dataset" id="ac_totCounty" class="radioCounty" value="ac_tot"> Total CPAD Acreage</label>
+                  <label><input type="Radio" name="dataset" id="POP_NORMCounty" class="radioCounty" value="POP_NORM"> CPAD Acres per Inhabitant</label>
                 </form>
               </div>
 
@@ -405,8 +405,6 @@
           <p>California cities are inequally wealthy in protected areas. The map below shows the quantity of protected areas in the 50 California cities featuring the largest CPAD area acreage, either in terms of <strong>total acreage</strong> or <strong>acreage per inhabitant</strong>. <strong>Click on any city on the map or in the table</strong> to take a deeper look into its protected areas.</p>
         </div>
 
-<!--
-
         <form id="cityNav" class="switch switch-blue">
             <input type="radio" class="div2" name="viewTab" id="week2" checked>
             <label for="week2" class="switch-label switch-label-off">Map View</label>
@@ -417,16 +415,16 @@
 
         <div id="cityTabs">
 
-        <div id="div2" class="tab"> -->
+        <div id="div2" class="tab">
 
           <div id="cityMap" class="map">
 
-        <!--  <div>
+          <div>
             <form class="mapScale">
-              <label><input type="Radio" name="dataset" id="ac_tot" class="radio" value="ac_tot"> Total CPAD Acreage</label>
-              <label><input type="Radio" name="dataset" id="POP_NORM" class="radio" value="POP_NORM"> CPAD Acres per Inhabitant</label>
+              <label><input type="Radio" name="dataset" id="ac_totCity" class="radioCity" value="ac_tot"> Total CPAD Acreage</label>
+              <label><input type="Radio" name="dataset" id="POP_NORMCity" class="radioCity" value="POP_NORM"> CPAD Acres per Inhabitant</label>
             </form>
-          </div>-->
+          </div>
 
             <svg id="cityMapSvg" class="ca"></svg>
 
