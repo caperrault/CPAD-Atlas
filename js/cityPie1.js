@@ -1,4 +1,4 @@
-d3.csv("Access_type_allcounties_perc.csv", function (dataset) {
+d3.csv("CPAD_50cities_accessType.csv", function (dataset) {
 
           var width = 215,
               height = 300,
@@ -17,7 +17,7 @@ d3.csv("Access_type_allcounties_perc.csv", function (dataset) {
                               .range(["#FFC8B7", "#EF8B6C", "#F05522", "#E0E0E0"])
                               .domain(d3.range(0,4));
 
-          var svg = d3.select("#countyPie1").append("svg")
+          var svg = d3.select("#cityPie1").append("svg")
                       .attr("width", width)
                       .attr("height", height)
                       .append("g")
@@ -54,7 +54,7 @@ d3.csv("Access_type_allcounties_perc.csv", function (dataset) {
                           .on("mouseout", function () { div.transition().duration(300).style("opacity", 0);
                           });
 
-          var legend = d3.select("#countyPie1").append("svg")
+          var legend = d3.select("#cityPie1").append("svg")
           .attr("class", "legend")
           .attr("width", radius * 4)
           .attr("height", radius * 4)
@@ -79,12 +79,12 @@ d3.csv("Access_type_allcounties_perc.csv", function (dataset) {
           .text( function (d, i) { return dataset[i].Access_type;})
           .attr("fill", "#444");
 
-          var titlePie1 = d3.select("#countyPie1").append("svg")
+          var titleCityPie1 = d3.select("#cityPie1").append("svg")
                             .attr("x", 220)
                             .attr("y", Math.min(width, height) / 2 - 55)
                             .style("display", "none");
 
-            titlePie1.append("text")
+            titleCityPie1.append("text")
             .attr("fill", "black")
             .attr("font-size", "12px")
             .attr("dy", "1em")
@@ -101,13 +101,13 @@ d3.csv("Access_type_allcounties_perc.csv", function (dataset) {
           function setValue (value) {
             path.style("display", null);
             legend.style("display", null);
-            titlePie1.style("display", null);
+            titleCityPie1.style("display", null);
             pie.value(function(d) { return d[value]; });
             path = path.data(pie);
             path.transition().duration(750).attrTween("d", arcTween);
           }
 
-          updatePie1 = setValue;
+          updateCityPie1 = setValue;
 
           function arcTween(a) {
             var i = d3.interpolate(this._current, a);

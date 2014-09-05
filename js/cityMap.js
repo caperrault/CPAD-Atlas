@@ -1,15 +1,15 @@
 var selectedCity;
 
-/*function cityClass(name) {
+function cityClass(name) {
   d3.select(".selected").classed("selected", false);
   selectedCity = name;
-  d3.selectAll(".Mcounty")
-    .classed("selected", function(d) {return d.properties.name == name;})
+  d3.selectAll(".Mcity")
+    .classed("selected", function(d) {return d.properties.Name == name;})
     .transition().duration(300);
   d3.selectAll(".Tcounty")
     .classed("selected", function(d) {return d.County == name;})
     .transition().duration(300);
-}*/
+}
 
 d3.json("CPAD_percity.json", function(err, ca) {
 
@@ -63,7 +63,16 @@ d3.json("CPAD_percity.json", function(err, ca) {
       div.text(d.properties.Name)
       .style("left", (d3.event.pageX) + "px")
       .style("top", (d3.event.pageY -30) + "px");})
-      .on("mouseout", function (d) { div.transition().duration(300).style("opacity", 0);});
+      .on("mouseout", function (d) { div.transition().duration(300).style("opacity", 0);})
+      .on("click", function(d) {
+      selectedCity = d.properties.Name;
+      cityClass(d.properties.Name);
+      updateCityPie1(d.properties.Name);
+      updateCityPie2(d.properties.Name);
+      updateCityName(d.properties.Name);
+      updateCityTot(d3.format(",")(d.properties.ac_tot));
+      updateCityInh(d3.format(",")(d.properties.POP_NORM));
+  });
 
       var legend = d3.select("#cityMapSvg")
           .append("g")
@@ -83,6 +92,7 @@ d3.json("CPAD_percity.json", function(err, ca) {
       legend.append("text")
           .attr("y", function(d) { return - 2 * radius(d); })
           .attr("dy", "1.3em")
+          .style("text-anchor", "middle")
           .text(d3.format(".1s"));
 
 d3.selectAll(".radioCity").on("change", function(){
