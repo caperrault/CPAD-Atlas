@@ -50,7 +50,15 @@ h2 {
   background: white;
   }
 
+.previousCityName {
+  background: white;
+  }
+
 #CountyName {
+  margin-bottom: 20px;
+}
+
+#CityName {
   margin-bottom: 20px;
 }
 
@@ -186,6 +194,10 @@ g .tableHeaderSelected {
   float: left;
 }
 
+#cityHeaders {
+  float: left;
+}
+
 .rowsGrp {
   clear: both;
 }
@@ -219,7 +231,7 @@ g .tableHeaderSelected {
     color: red;
 }
 
-#tabs {
+#countyTabs {
   clear: both;
   float: left;
 }
@@ -255,11 +267,81 @@ border-left: 1px dotted lightGray;
   float:right
 }
 
+#cityTabs {
+  clear: both;
+  float: left;
+}
+
+.Tcity {
+  fill: white;
+}
+
+.Tcity:hover{
+  opacity: 0.5;
+  cursor: pointer;
+  padding: -10px;
+}
+
+.Tcity text{
+  font-size: 10px;
+  fill: #444;
+  font-family: Helvetica, Arial,inherit;
+  text-anchor: middle;
+}
+
+.Tcity.selected g {
+    background: red;
+    background-opacity: 1;
+}
+
+.Tcity.selected g text {
+    font-weight: bold;
+    opacity: 1;
+    font-size: 14px;
+    color: red;
+}
+
+#cityTable{
+overflow: scroll;
+height: 500px;
+float: left;
+width: 463px;
+clear: both;
+border: 1px dotted lightGray;
+}
+
+#cityRow {
+display: block;
+width: 95%;
+height: 1050px;
+float: right;
+border-left: 1px dotted lightGray;
+}
+
+#cityIndex {
+  float: left;
+  width: 20px;
+  height: 1050px;
+  font-size: 10px;
+  fill: #444;
+  font-family: Helvetica, Arial,inherit;
+  text-anchor: middle;
+}
+
+#cityPies {
+  float:right
+}
+
 .hide{
     display: none;
   }
 
-#nav {
+#countyNav {
+  float: left;
+  width: 150px;
+}
+
+#cityNav {
   float: left;
   width: 150px;
 }
@@ -281,29 +363,57 @@ border-left: 1px dotted lightGray;
   cursor: pointer;
 }
 
-.div1 {
+.countyDiv1 {
   display: none;
 }
 
-.div1:checked + .switch-label {
+.countyDiv1:checked + .switch-label {
   font-weight: bold;
   transition: 0.15s ease-out;
   color: rgb(255, 255, 255);
 }
 
-.div1:checked + .switch-label-on ~ .switch-selection {
+.countyDiv1:checked + .switch-label-on ~ .switch-selection {
   left: 75px;
 }
 
-.div2 {
+.countyDiv2 {
   display: none;
 }
 
-.div2:checked + .switch-label-on ~ .switch-selection {
+.countyDiv2:checked + .switch-label-on ~ .switch-selection {
   left: 72px;
 }
 
-.div2:checked + .switch-label {
+.countyDiv2:checked + .switch-label {
+  font-weight: bold;
+  transition: 0.15s ease-out;
+  color: rgb(255, 255, 255);
+}
+
+.cityDiv1 {
+  display: none;
+}
+
+.cityDiv1:checked + .switch-label {
+  font-weight: bold;
+  transition: 0.15s ease-out;
+  color: rgb(255, 255, 255);
+}
+
+.cityDiv1:checked + .switch-label-on ~ .switch-selection {
+  left: 75px;
+}
+
+.cityDiv2 {
+  display: none;
+}
+
+.cityDiv2:checked + .switch-label-on ~ .switch-selection {
+  left: 72px;
+}
+
+.cityDiv2:checked + .switch-label {
   font-weight: bold;
   transition: 0.15s ease-out;
   color: rgb(255, 255, 255);

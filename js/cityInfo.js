@@ -90,7 +90,7 @@ function setCityInhValue(inh) {
                 .attr("font-size", "12px");
 
                 cityInh.append("cityInhSvg:tspan")
-                .text(d3.format('.1f')(inh))
+                .text(inh)
                 .attr("text-anchor", "left")
                 .attr("y","65%")
                 .attr("fill", "#444")

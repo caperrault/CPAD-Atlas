@@ -25,7 +25,7 @@ d3.json("CPAD_percity.json", function(err, ca) {
               .attr("type","Radio")
 
   var radius = d3.scale.sqrt()
-    .domain([0, 50000000])
+    .domain([0, 50000])
     .range([0, 15]);
 
   var projection = d3.geo.albers()
@@ -80,7 +80,7 @@ d3.json("CPAD_percity.json", function(err, ca) {
           .attr("class", "legend")
           .attr("transform", "translate(" + 30 + "," + (height - 80) + ")")
           .selectAll("g")
-          .data([30e6, 100e6])
+          .data([30e3, 100e3])
           .enter()
           .append("g")
           .style("display", "none");
@@ -102,7 +102,7 @@ if (document.getElementById("ac_totCity").checked) {
              .style("fill", "#239743")
              .style("stroke", "#239743")
              .style("opacity", 0.8)
-             .attr("r", function (d) { return radius(d.properties.ac_tot)*50})
+             .attr("r", function (d) { return radius(d.properties.ac_tot)*2})
         legend.transition().duration(300).style("display", null);
              }
 
@@ -111,7 +111,7 @@ else if (document.getElementById("POP_NORMCity").checked) {
              .style("fill", "#239743")
              .style("stroke", "#239743")
              .style("opacity", 0.8)
-             .attr("r", function (d) { return radius(d.properties.POP_NORM)*200})
+             .attr("r", function (d) { return radius(d.properties.POP_NORM)*8})
         legend.transition().duration(300).style("display", null);
              }
            });
